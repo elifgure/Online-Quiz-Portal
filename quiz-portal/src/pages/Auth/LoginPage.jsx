@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LoginForm from '../../components/Forms/LoginForm'
+import { useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const LoginPage = () => {
+  const location = useLocation()
+
+  useEffect(()=>{
+    if(location.state?.message){
+       toast.success(location.state.message);
+    }
+  }, [location])
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
