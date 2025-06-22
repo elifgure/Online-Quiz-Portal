@@ -1,25 +1,34 @@
-import { Route, Routes } from "react-router-dom"
-import LandingPage from "./pages/LandingPage"
-import LoginForm from "./components/Forms/LoginForm"
-import LoginPage from "./pages/Auth/LoginPage"
+import { Route, RouterProvider, Routes } from "react-router-dom"
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import Roles from "./pages/roles"
-import FormsPage from "./pages/FormsPage"
 import FormCreate from "./components/Forms/FormCreate"
 import QuizPage from "./pages/Student/QuizPage"
-import RegisterPage from "./pages/Auth/RegisterPage"
+import router from "./routes/router"
 
 
 function App() { 
   return (
     <>
-      <Routes>
+      {/* <Routes>
         <Route path="/roles" element={<Roles />}/>
-        <Route path="/" element={<LandingPage />}/>
-          <Route path="/register" element={<RegisterPage />}/>
-        <Route path="/login" element={<LoginPage />}/>
         <Route path="/create-quiz" element={<FormCreate />}/>
         <Route path="/quizzes" element={<QuizPage />}/>
-      </Routes>
+      </Routes> */}
+      
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      <RouterProvider router={router} />
     </>
   )
 }

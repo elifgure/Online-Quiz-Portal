@@ -7,6 +7,5 @@ export const loginSchema = yup.object({
     .required("E-posta adresi girmeniz gerekiyor"),
   password: yup
     .string()
-    .min(6, "Şifre en az 6 karakter olmalıdır")
     .required("Şifre girmeniz gerekiyor"),
 });
