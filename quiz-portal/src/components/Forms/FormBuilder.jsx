@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Plus, 
   Type, 
@@ -67,7 +67,6 @@ const FormBuilder = () => {
     const fieldType = fieldTypes.find(ft => ft.type === element.type);
     const IconComponent = fieldType?.icon || Type;
    console.log('Rendering element:', element);
-
     return (
       <div key={element.id} className="bg-white border border-gray-200 rounded-lg p-4 mb-4 group hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between mb-3">
@@ -79,8 +78,7 @@ const FormBuilder = () => {
               value={element.label}
               onChange={(e) => updateElement(element.id, 'label', e.target.value)}
               className="font-medium text-gray-800 bg-transparent border-none outline-none focus:bg-gray-50 px-2 py-1 rounded"
-              placeholder="Alan adı"
-            />
+              placeholder="Alan adı"/>
           </div>
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button className="p-1 text-gray-400 hover:text-gray-600">
