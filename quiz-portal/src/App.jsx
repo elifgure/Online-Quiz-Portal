@@ -5,6 +5,7 @@ import Roles from "./pages/roles"
 import FormCreate from "./components/Forms/FormCreate"
 import QuizPage from "./pages/Student/QuizPage"
 import router from "./routes/router"
+import { AuthProvider } from "./context/AuthContext"
 
 
 function App() { 
@@ -28,7 +29,9 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <RouterProvider router={router} />
+     <AuthProvider>
+       <RouterProvider router={router} />
+     </AuthProvider>
     </>
   )
 }

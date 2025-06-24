@@ -72,7 +72,10 @@ export const loginUser = async (email, password, role) => {
       throw new Error("Kullanıcı Bulunamadı");
     }
     const userData = userSnapshot.data();
-    return userData;
+    return {
+      userName: userCredential.user.displayName,
+      ...userData
+    };
   } catch (error) {
     throw new Error("Giriş başarısız: " + error.message);
     //  let errorMessage;
@@ -114,8 +117,10 @@ export const loginWithGoogle = async () => {
 export const logOut = async () => {
   try {
     await signOut(auth);
+    return { success: true };
   } catch (error) {
-    throw console.error("Çıkış yaparken hata oluştu: " + error.message);
+    console.error("Çıkış yaparken hata oluştu: " + error.message);
+    return { success: false, error }; // hatayı yakalayıp anlamlı biçimde geri dön
   }
 };
 export const onStateChanged = (callback) => {

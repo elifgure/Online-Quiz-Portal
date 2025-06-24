@@ -33,7 +33,7 @@ const LandingPage = () => {
           <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col sm:flex-row gap-6">
               <Link
-                to="/quizzes"
+                to="/quiz-list"
                 className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 border-2 border-purple-600 relative overflow-hidden"
               >
                 <span className="relative z-10">Quizlere Göz At</span>
