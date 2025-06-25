@@ -70,7 +70,7 @@ const QuizCard = () => {
               className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-2xl border border-purple-200 transition-all duration-300 hover:-translate-y-2 cursor-pointer"
             >
               {/* Category Badge */}
-              <div className={`inline-block px-4 py-2 rounded-2xl text-white text-sm font-semibold mb-4  bg-[#1a6b7daf] ${quiz.category || 'from-gray-500 to-gray-600'} group-hover:scale-110 transition-transform duration-300`}>
+              <div className={`inline-block px-4 py-2 rounded-2xl text-white text-sm font-semibold mb-4  bg-gradient-to-r from-teal-500 to-cyan-500 shadow-sm ${quiz.category || 'from-gray-500 to-gray-600'} group-hover:scale-110 transition-transform duration-300`}>
                 {quiz.category}
               </div>
 
