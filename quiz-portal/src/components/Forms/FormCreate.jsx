@@ -15,49 +15,58 @@ import {
   Share2,
   Layers,
 } from "lucide-react";
-import { useState } from "react";
-import LogoField from "./FormElements/LogoField";
-import { fieldTypes } from "../../data/fieldTypes";
-import ShortText from "./FormElements/ShortText";
-import LongText from "./FormElements/LongText";
 
-const formElementComponents = {
-LogoField,
-ShortText,
-LongText,
-};
+import { fieldTypes } from "../../data/fieldTypes";
+import { useReducer } from "react";
+import { formReducer, initialState } from "../../reducers/formReducer";
+import DynamicField from "./DynamicField";
 
 const FormCreate = () => {
-  const [formElement, setFormElement] = useState([]);
-  const[formTitle, setFormTitle] = useState("")
+  const [state, dispatch] = useReducer(formReducer, initialState);
 
-
-  const addFormElement = (element) => {
-    const newElement = {
-      id: Date.now(),
-      type: element.type,
-      label: `${element.label} Alanı`,
-      required: false,
-      placeholder: `${element.label} alanı giriniz...`,
-    };
-    setFormElement([...formElement, newElement]);
+  const addFormElement = (fieldType) => {
+    dispatch({ type: "ADD_ELEMENT", payload: fieldType });
   };
-  const renderFormElement = (element)=>{
-    const fieldType = fieldTypes.find(ft => ft.type === element.type);
-    const Component = formElementComponents[fieldType?.component];
-    if(!Component) return null;
+
+  const handleElementChange = (id, value) => {
+    dispatch({ type: "UPDATE_ELEMENT", payload: { id, value } });
+  };
+
+  const handleElementLabelChange = (id, label) => {
+    dispatch({ type: "UPDATE_ELEMENT_LABEL", payload: { id, label } });
+  };
+
+  const handleElementOptionsChange = (id, options) => {
+    dispatch({ type: "UPDATE_ELEMENT_OPTIONS", payload: { id, options } });
+  };
+
+  const renderFormElement = (element) => {
     return (
-      <Component key={element.id}
-      label={element.label}
-      placeholder={element.placeholder}
-      required={element.required}
-      onDelete={()=> handleDeleteElement(element.id)}
+      <DynamicField
+        key={element.id}
+        id={element.id}
+        type={element.type}
+        label={element.label}
+        placeholder={element.placeholder}
+        required={element.required}
+        value={element.value}
+        options={element.options}
+        onChange={(value) => handleElementChange(element.id, value)}
+        onLabelChange={(label) => handleElementLabelChange(element.id, label)}
+        onOptionsChange={(options) => handleElementOptionsChange(element.id, options)}
+        onDelete={() => handleDeleteElement(element.id)}
       />
-    )
+    );
+  };
+
+  const handleDeleteElement = (id) => {
+    dispatch({ type: "DELETE_ELEMENT", payload: id });
+  };
+
+  const updateTitle =(title)=>{
+    dispatch({type:"UPDATE_TITLE", payload: title})
   }
-  const handleDeleteElement =(id)=>{
-    setFormElement(prev => prev.filter(el => el.id !== id))   
-  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50 relative">
       {/* Background Decorative Elements */}
@@ -74,8 +83,8 @@ const FormCreate = () => {
               type="text"
               className="text-xl font-semibold bg-transparent border-none outline-none focus:bg-purple-50/50 px-3 py-2 rounded-lg transition-all duration-200 text-[#044c5c] placeholder-[#37747c]"
               placeholder="Quiz başlığı"
-              value={formTitle}
-              onChange={(e) => setFormTitle(e.target.value)}
+              value={state.title}
+              onChange={(e) => updateTitle(e.target.value)}
             />
           </div>
           <div className="flex items-center gap-3">
@@ -147,75 +156,28 @@ const FormCreate = () => {
                 </div>
 
                 <div className="mt-4 space-y-3">
+                  {fieldTypes.map((fieldType) => {
+                    const IconComponent = fieldType.icon;
+
+                    return (
+                      <button
+                        key={fieldType.type}
+                        onClick={() => addFormElement(fieldType)}
+                        className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-purple-50/70 hover:to-pink-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-purple-200/50 hover:shadow-sm"
+                      >
+                        <div
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r ${fieldType.color} shadow-sm group-hover:scale-105 transition-transform duration-200`}
+                        >
+                          <IconComponent className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-[#044c5c] font-semibold">
+                          {fieldType.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+
                   {/* Kategori */}
-                  <div onClick={()=> addFormElement({type:"kategori", label:"Kategori"})} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-purple-50/70 hover:to-pink-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-purple-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <Layers className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Kategori
-                    </span>
-                  </div>
-
-                  {/* Soru Başlığı */}
-                  <div onClick={()=> addFormElement({type:"logo", label:"Logo"})} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-orange-50/70 hover:to-yellow-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-orange-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-orange-500 to-yellow-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <Tag className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Logo
-                    </span>
-                  </div>
-
-                  {/* Kısa Cevap */}
-                  <div onClick={()=> addFormElement({type:"shortText", label:"Kısa Metin"})}className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50/70 hover:to-cyan-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-blue-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-blue-500 to-cyan-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <Type className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Kısa Metin
-                    </span>
-                  </div>
-
-                  {/* Uzun Cevap */}
-                  <div onClick={()=> addFormElement({type: "longText", label:"Uzun Metin"})}className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-green-50/70 hover:to-emerald-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-green-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-green-500 to-emerald-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <FileText className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Uzun Metin
-                    </span>
-                  </div>
-
-                  {/* Tek Seçim */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-indigo-50/70 hover:to-purple-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-indigo-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <Circle className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Tek Seçim
-                    </span>
-                  </div>
-
-                  {/* Doğru / Yanlış */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-rose-50/70 hover:to-pink-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-rose-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-rose-500 to-pink-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <HelpCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Doğru / Yanlış
-                    </span>
-                  </div>
-
-                  {/* Çoklu Seçim */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-teal-50/70 hover:to-cyan-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-teal-200/50 hover:shadow-sm">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-teal-500 to-cyan-500 shadow-sm group-hover:scale-105 transition-transform duration-200">
-                      <Check className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-[#044c5c] font-semibold">
-                      Çoklu Seçim
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -225,31 +187,31 @@ const FormCreate = () => {
         {/* Main Content Area */}
         <div className="flex-1 p-8 bg-gradient-to-br from-white/50 to-purple-50/30">
           <div className="max-w-3xl mx-auto h-full flex items-center justify-center">
-           {formElement.length === 0 ? (
-             <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-3xl border border-purple-200/30 shadow-lg px-12">
-              <div className="w-20 h-20 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Plus className="w-10 h-10 text-purple-500" />
-              </div>
-              <h3 className="text-2xl font-bold text-[#044c5c] mb-4">
-                Quiz Oluşturmaya Başlayın
-              </h3>
-              <p className="text-[#37747c] text-lg leading-relaxed max-w-md mx-auto">
-                Sol panelden quiz elementlerini seçerek interaktif quizinizi
-                oluşturun
-              </p>
+            {state.elements.length === 0 ? (
+              <div className="text-center py-16 bg-white/80 backdrop-blur-sm rounded-3xl border border-purple-200/30 shadow-lg px-12">
+                <div className="w-20 h-20 bg-gradient-to-r from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <Plus className="w-10 h-10 text-purple-500" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#044c5c] mb-4">
+                  Quiz Oluşturmaya Başlayın
+                </h3>
+                <p className="text-[#37747c] text-lg leading-relaxed max-w-md mx-auto">
+                  Sol panelden quiz elementlerini seçerek interaktif quizinizi
+                  oluşturun
+                </p>
 
-              {/* Decorative dots */}
-              <div className="flex justify-center gap-2 mt-8">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                {/* Decorative dots */}
+                <div className="flex justify-center gap-2 mt-8">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                </div>
               </div>
-            </div>
-           ) : (
-            <div className="space-y-4 w-full">
-              {formElement.map((element) =>renderFormElement(element))}
-            </div>
-           )}
+            ) : (
+              <div className="space-y-4 w-full">
+                {state.elements.map((element) => renderFormElement(element))}
+              </div>
+            )}
           </div>
         </div>
       </div>

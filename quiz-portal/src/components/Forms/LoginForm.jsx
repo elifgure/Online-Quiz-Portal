@@ -38,14 +38,10 @@ const LoginForm = () => {
     try {
       const result = await loginUser(data.email, data.password, role);
       if (result && role === "student") {
-        console.log(result);
         navigate("/student");
-      
-      } else {
-        navigate("/");
+      } else if (result && role === "teacher") {
+        navigate("/teacher");
       }
-
-      console.log("Giriş başarılı, rol:", role, result);
       reset();
     } catch (err) {
       console.log("Bilinmeyen hata:", err.message);

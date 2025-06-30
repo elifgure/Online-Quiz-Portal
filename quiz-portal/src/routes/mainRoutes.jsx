@@ -5,6 +5,7 @@ import LandingPage from "../pages/LandingPage";
 import QuizListPage from "../pages/QuizListPage";
 import QuizPage from "../pages/Student/QuizPage";
 import StudentPage from "../pages/Student/StudentPage";
+import TeacherPage from "../pages/Teacher/TeacherPage";
 
 const mainRoutes =[
     {
@@ -30,5 +31,9 @@ const mainRoutes =[
         path:"create-quiz2",
         element:<FormCreate />
     },
+    {
+        path:"teacher",
+        element:<TeacherPage />
+    }
 ]
 export default mainRoutes;
