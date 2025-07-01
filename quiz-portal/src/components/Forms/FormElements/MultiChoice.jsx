@@ -1,6 +1,6 @@
 import React from 'react';
 
-const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const alphabet = 'ABCDE'.split('');
 
 const MultiChoice = ({ label = '', onLabelChange, options = [''], onOptionsChange }) => {
   // options: şıkların metinlerini tutan dizi
@@ -23,7 +23,7 @@ const MultiChoice = ({ label = '', onLabelChange, options = [''], onOptionsChang
         type="text"
         value={label}
         onChange={(e) => onLabelChange(e.target.value)}
-        placeholder="Çoktan seçmeli soru yazınız"
+        placeholder="Soru"
         className="border px-3 py-2 rounded w-full font-semibold"
       />
       {/* Şıklar */}

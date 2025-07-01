@@ -63,9 +63,13 @@ const FormCreate = () => {
     dispatch({ type: "DELETE_ELEMENT", payload: id });
   };
 
-  const updateTitle =(title)=>{
-    dispatch({type:"UPDATE_TITLE", payload: title})
-  }
+  const updateTitle = (title) => {
+    dispatch({ type: "UPDATE_TITLE", payload: title });
+  };
+
+  const updateDuration = (duration) => {
+    dispatch({ type: "UPDATE_DURATION", payload: duration });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50 relative">
@@ -86,6 +90,15 @@ const FormCreate = () => {
               value={state.title}
               onChange={(e) => updateTitle(e.target.value)}
             />
+            <input
+              type="number"
+              min="1"
+              className="w-28 text-md bg-white border border-purple-200/50 outline-none px-3 py-2 rounded-lg transition-all duration-200 text-[#044c5c] placeholder-[#37747c]"
+              placeholder="Süre (dk)"
+              value={state.duration}
+              onChange={(e) => updateDuration(e.target.value)}
+            />
+            <span className="text-[#37747c] text-sm">dk</span>
           </div>
           <div className="flex items-center gap-3">
             <button className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-purple-50/70 rounded-lg transition-all duration-200 font-medium">

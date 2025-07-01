@@ -4,6 +4,7 @@ import CategoryField from "./FormElements/CategoryField";
 import ShortText from "./FormElements/ShortText";
 import LongText from "./FormElements/LongText";
 import BooleanField from "./FormElements/BooleanField";
+import MultiChoice from "./FormElements/MultiChoice";
 
 const FIELD_COMPONENTS = {
   logo: LogoField,
@@ -12,7 +13,7 @@ const FIELD_COMPONENTS = {
 };
 
 // Kendi etiketini yöneten bileşen türlerini burada listeliyoruz
-const typesWithInternalLabels = ["shortText", "longText", "boolean"];
+const typesWithInternalLabels = ["shortText", "longText", "boolean", "multiChoice"];
 
 const DynamicField = ({
   id,
@@ -21,9 +22,11 @@ const DynamicField = ({
   placeholder,
   required,
   value,
+  options,
   onChange,
   onDelete,
   onLabelChange,
+  onOptionsChange,
 }) => {
   const renderInput = () => {
     switch (type) {
@@ -71,7 +74,7 @@ const DynamicField = ({
       case "category":
         return (
           <CategoryField
-       onChange={onChange}
+            onChange={onChange}
           />
         );
       case "shortText":
@@ -91,6 +94,15 @@ const DynamicField = ({
             onLabelChange={onLabelChange}
             value={value}
             onChange={onChange}
+          />
+        );
+      case "multiChoice":
+        return (
+          <MultiChoice
+            label={label}
+            onLabelChange={onLabelChange}
+            options={options || [""]}
+            onOptionsChange={onOptionsChange}
           />
         );
       default:

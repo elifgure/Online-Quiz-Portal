@@ -38,13 +38,7 @@ export const fieldTypes = [
     component: "LongText",
     color: "from-green-500 to-emerald-500",
   },
-  {
-    type: "singleChoice",
-    label: "Tek Seçim",
-    icon: Circle,
-    component: "SingleChoice",
-    color: "from-indigo-500 to-purple-500",
-  },
+
   {
     type: "boolean",
     label: "Onay Kutusu",

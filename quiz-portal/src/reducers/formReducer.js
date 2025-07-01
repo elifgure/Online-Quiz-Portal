@@ -3,6 +3,7 @@ import React from "react";
 
 export const initialState = {
   title: "",
+  duration: "",
   elements: [],
 };
 
@@ -58,6 +59,11 @@ export const formReducer = (state, action) => {
             ? { ...el, options: action.payload.options }
             : el
         ),
+      };
+    case "UPDATE_DURATION":
+      return {
+        ...state,
+        duration: action.payload,
       };
     // case "multiChoice":
       // return (
