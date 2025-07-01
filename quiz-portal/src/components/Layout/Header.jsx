@@ -125,7 +125,7 @@ const Header = () => {
                       
                       <div className="py-1">
                         <Link
-                          to="/student"
+                          to={user?.role === "teacher" ? "/teacher" : "/student"}
                           onClick={handleMenuItemClick}
                           className="flex items-center space-x-3 px-4 py-2 text-sm text-[#044c5c] hover:bg-purple-50 transition-colors duration-200"
                         >
@@ -238,7 +238,7 @@ const Header = () => {
           {isAuthenticated ? (
             <>
               <Link
-                to="/student"
+                to={user?.role === "teacher" ? "/teacher" : "/student"}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center space-x-3 text-[#044c5c] hover:text-purple-600 px-4 py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-purple-50/70 border border-transparent hover:border-purple-200/50 hover:shadow-sm"
               >

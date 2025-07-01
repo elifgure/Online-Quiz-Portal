@@ -1,6 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../lib/fireBase";
+import { auth, db } from "../lib/fireBase";
+import { doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -11,6 +12,7 @@ export const useAuth = () => {
   }
   return context;
 };
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,36 +20,62 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const userData = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          emailVerified: firebaseUser.emailVerified, // Firebase'den gelen gerçek emailVerified durumu
-          photoURL: firebaseUser.photoURL,
-          phoneNumber: firebaseUser.phoneNumber,
-          createdAt: firebaseUser.metadata.creationTime,
-          lastLoginAt: firebaseUser.metadata.lastSignInTime,
-          providerData: firebaseUser.providerData,
-        };
-        setUser(userData)
-      }else{
-        setUser(null)
+        try {
+          let role = null;
+
+          // Önce öğretmen mi diye kontrol et
+          const teacherRef = doc(db, "teachers", firebaseUser.uid);
+          const teacherSnap = await getDoc(teacherRef);
+
+          if (teacherSnap.exists()) {
+            role = "teacher";
+          } else {
+            // Öğrenci mi diye kontrol et
+            const studentRef = doc(db, "students", firebaseUser.uid);
+            const studentSnap = await getDoc(studentRef);
+            if (studentSnap.exists()) {
+              role = "student";
+            }
+          }
+
+          const userData = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            displayName: firebaseUser.displayName,
+            emailVerified: firebaseUser.emailVerified,
+            photoURL: firebaseUser.photoURL,
+            phoneNumber: firebaseUser.phoneNumber,
+            createdAt: firebaseUser.metadata.creationTime,
+            lastLoginAt: firebaseUser.metadata.lastSignInTime,
+            providerData: firebaseUser.providerData,
+            role: role, // 🔥 En önemli kısım!
+          };
+
+          setUser(userData);
+        } catch (err) {
+          console.error("Kullanıcı rolü alınamadı:", err);
+          setUser(null);
+        }
+      } else {
+        setUser(null);
       }
-      setLoading(false)
+      setLoading(false);
     });
-      return () => unsubscribe();
+
+    return () => unsubscribe();
   }, []);
 
-  const value ={
-     user,
+  const value = {
+    user,
     loading,
     isAuthenticated: !!user,
-    isEmailVerified: user?.emailVerified || false, // Firebase'den gelen emailVerified değeri
+    isEmailVerified: user?.emailVerified || false,
     userEmail: user?.email,
     userName: user?.displayName,
-    userId: user?.uid
-  }
-   return (
+    userId: user?.uid,
+  };
+
+  return (
     <AuthContext.Provider value={value}>
       {!loading && children}
     </AuthContext.Provider>
