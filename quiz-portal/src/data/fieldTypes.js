@@ -16,13 +16,7 @@ export const fieldTypes = [
     component: "LogoField",
     color: "from-orange-500 to-yellow-500",
   },
-  {
-    type: "category",
-    label: "Kategori",
-    icon: Layers,
-    component: "CategoryField",
-    color: "from-purple-500 to-pink-500", 
-  },
+  
  
   {
     type: "shortText",

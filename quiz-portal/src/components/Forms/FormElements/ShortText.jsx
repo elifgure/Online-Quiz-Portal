@@ -1,16 +1,20 @@
 import React from "react";
 
-const ShortText = ({onLabelChange }) => {
+const ShortText = ({onLabelChange, isPreview = false }) => {
   return (
     <div className="flex flex-col gap-2 mt-7">
       {/* Soru metni */}
-      <input
+      {
+        !isPreview && (
+          <input
         type="text"
         
         onChange={(e) => onLabelChange(e.target.value)}
         placeholder="Soru"
         className="border px-3 py-2 rounded w-full font-semibold"
       />
+        )
+      }
       {/* Cevap alanı */}
       <input
         type="text"

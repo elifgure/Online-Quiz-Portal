@@ -1,6 +1,5 @@
 import { GripVertical, Trash2 } from "lucide-react";
 import LogoField from "./FormElements/LogoField";
-import CategoryField from "./FormElements/CategoryField";
 import ShortText from "./FormElements/ShortText";
 import LongText from "./FormElements/LongText";
 import BooleanField from "./FormElements/BooleanField";
@@ -8,7 +7,6 @@ import MultiChoice from "./FormElements/MultiChoice";
 
 const FIELD_COMPONENTS = {
   logo: LogoField,
-  category: CategoryField,
   shortText: ShortText,
 };
 

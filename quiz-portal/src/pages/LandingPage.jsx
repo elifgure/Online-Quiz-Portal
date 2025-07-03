@@ -57,7 +57,7 @@ const LandingPage = () => {
               </Link>
               
               <Link 
-                to="/create-quiz"
+                to="/create-quiz2"
                 className="group bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 relative overflow-hidden"
               >
                 <span className="relative z-10">Quiz Oluştur</span>

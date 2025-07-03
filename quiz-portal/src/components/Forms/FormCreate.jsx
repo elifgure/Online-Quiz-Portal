@@ -50,6 +50,7 @@ const FormCreate = () => {
     const quizData = {
       title: state.title,
       duration: Number(state.duration),
+      category: state.category,
       createdBy: user?.uid || "anonymous",
       elements: state.elements,
     };
@@ -58,7 +59,7 @@ const FormCreate = () => {
     const result = await saveQuiz(quizData);
     if (result.success) {
       toast.success("Quiz başarıyla kaydedildi!");
-      navigate("my-quiz")
+      navigate("/my-quiz")
    
     } else {
       toast.error("Quiz kaydedilemedi!");
@@ -99,6 +100,10 @@ const FormCreate = () => {
     dispatch({ type: "UPDATE_DURATION", payload: duration });
   };
 
+  const updateCategory = (category) => {
+    dispatch({ type: "UPDATE_CATEGORY", payload: category });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50 relative">
       {/* Background Decorative Elements */}
@@ -126,7 +131,14 @@ const FormCreate = () => {
               value={state.duration}
               onChange={(e) => updateDuration(e.target.value)}
             />
-            <span className="text-[#37747c] text-sm">dk</span>
+           
+            <input
+              type="text"
+              className="w-40 text-md bg-white border border-purple-200/50 outline-none px-3 py-2 rounded-lg transition-all duration-200 text-[#044c5c] placeholder-[#37747c]"
+              placeholder="Kategori"
+              value={state.category}
+              onChange={(e) => updateCategory(e.target.value)}
+            />
           </div>
           <div className="flex items-center gap-3">
             <button className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-purple-50/70 rounded-lg transition-all duration-200 font-medium">
@@ -177,7 +189,7 @@ const FormCreate = () => {
           {/* Right Content Area */}
           <div className="flex-1 flex flex-col">
             {/* Search */}
-            <div className="p-4 border-b border-purple-200/30">
+            {/* <div className="p-4 border-b border-purple-200/30">
               <div className="relative">
                 <Search className="w-4 h-4 absolute left-3 top-3 text-purple-400" />
                 <input
@@ -186,7 +198,7 @@ const FormCreate = () => {
                   className="w-full pl-10 pr-4 py-2.5 border border-purple-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-400 bg-white/80 backdrop-blur-sm transition-all duration-200 text-[#044c5c] placeholder-[#37747c]"
                 />
               </div>
-            </div>
+            </div> */}
 
             {/* Elements List */}
             <div className="flex-1 overflow-y-auto p-4">

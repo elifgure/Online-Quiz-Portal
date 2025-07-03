@@ -1,5 +1,5 @@
 import { db } from "../../lib/fireBase";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, deleteDoc, doc } from "firebase/firestore";
 
 export const saveQuiz = async (quizData) => {
   function removeUndefinedFields(obj) {
@@ -24,4 +24,14 @@ export const getQuizzesByUser = async (userId) => {
   const q = query(collection(db, "quizzes"), where("createdBy", "==", userId));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const deleteQuizById = async (quizId) => {
+  try {
+    await deleteDoc(doc(collection(db, "quizzes"), quizId));
+    return { success: true };
+  } catch (error) {
+    console.error("Quiz silinemedi:", error);
+    return { success: false, error: error.message };
+  }
 };

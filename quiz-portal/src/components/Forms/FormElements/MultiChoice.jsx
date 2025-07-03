@@ -2,8 +2,13 @@ import React from 'react';
 
 const alphabet = 'ABCDE'.split('');
 
-const MultiChoice = ({ label = '', onLabelChange, options = [''], onOptionsChange }) => {
-  // options: şıkların metinlerini tutan dizi
+const MultiChoice = ({
+  label = '',
+  onLabelChange,
+  options = [''],
+  onOptionsChange,
+  isPreview = false,
+}) => {
   const handleOptionChange = (idx, value) => {
     const newOptions = [...options];
     newOptions[idx] = value;
@@ -18,14 +23,17 @@ const MultiChoice = ({ label = '', onLabelChange, options = [''], onOptionsChang
 
   return (
     <div className="flex flex-col gap-2 mt-7">
-      {/* Soru metni */}
-      <input
-        type="text"
-        value={label}
-        onChange={(e) => onLabelChange(e.target.value)}
-        placeholder="Soru"
-        className="border px-3 py-2 rounded w-full font-semibold"
-      />
+      {/* Soru metni - sadece oluşturma modunda göster */}
+      {!isPreview && (
+        <input
+          type="text"
+          value={label}
+          onChange={(e) => onLabelChange(e.target.value)}
+          placeholder="Soru"
+          className="border px-3 py-2 rounded w-full font-semibold"
+        />
+      )}
+
       {/* Şıklar */}
       {options.map((opt, idx) => (
         <div key={idx} className="flex items-center gap-2">
@@ -35,18 +43,23 @@ const MultiChoice = ({ label = '', onLabelChange, options = [''], onOptionsChang
             value={opt}
             onChange={(e) => handleOptionChange(idx, e.target.value)}
             placeholder={`Şık ${alphabet[idx]}`}
-            className="border px-3 py-2 rounded w-full"
+            className={`border px-3 py-2 rounded w-full ${isPreview ? 'bg-gray-100 text-gray-500' : ''}`}
+            disabled={isPreview}
           />
         </div>
       ))}
-      <button
-        type="button"
-        onClick={handleAddOption}
-        className="mt-2 px-3 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 w-fit"
-        disabled={options.length >= alphabet.length}
-      >
-        + Şık Ekle
-      </button>
+
+      {/* + Şık Ekle butonu - sadece oluşturma modunda göster */}
+      {!isPreview && (
+        <button
+          type="button"
+          onClick={handleAddOption}
+          className="mt-2 px-3 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 w-fit"
+          disabled={options.length >= alphabet.length}
+        >
+          + Şık Ekle
+        </button>
+      )}
     </div>
   );
 };

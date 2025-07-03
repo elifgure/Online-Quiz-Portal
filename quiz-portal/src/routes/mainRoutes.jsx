@@ -1,4 +1,4 @@
-import FormBuilder from "../components/Forms/FormBuilder";
+
 import FormCreate from "../components/Forms/FormCreate";
 import QuizCard from "../components/Quiz/OrnekQuiz";
 import LandingPage from "../pages/LandingPage";
@@ -24,10 +24,7 @@ const mainRoutes =[
         path:"quiz-list",
         element: <QuizListPage />
     },
-    {
-        path:"create-quiz",
-        element:<FormBuilder />
-    },
+   
       {
         path:"create-quiz2",
         element:<FormCreate />
@@ -39,6 +36,7 @@ const mainRoutes =[
     {
         path:"my-quiz",
         element:<MyQuiz />
-    }
+    },
+
 ]
 export default mainRoutes;

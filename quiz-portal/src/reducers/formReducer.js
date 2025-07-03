@@ -4,6 +4,7 @@ import React from "react";
 export const initialState = {
   title: "",
   duration: "",
+  category: "",
   elements: [],
 };
 
@@ -70,6 +71,8 @@ export const formReducer = (state, action) => {
         ...state,
         duration: action.payload,
       };
+    case "UPDATE_CATEGORY":
+      return { ...state, category: action.payload };
     // case "multiChoice":
       // return (
       //   <MultiChoice

@@ -1,19 +1,23 @@
 import React from 'react';
 
-const BooleanField = ({ id, value, onLabelChange,  onChange }) => {
+const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false }) => {
   // Her bir radio grubunu benzersiz kılmak için id kullanıyoruz
   const radioGroupName = `boolean-answer-${id}`;
 
   return (
     <div className="flex flex-col gap-3 mt-7">
       {/* Soru metni için input */}
-      <input
+     {
+      !isPreview && (
+         <input
         type="text"
     
         onChange={(e) => onLabelChange(e.target.value)}
         placeholder="Doğru/Yanlış sorusunu buraya yazın"
         className="border px-3 py-2 rounded w-full font-semibold"
       />
+      )
+     }
 
       {/* Cevap olarak Doğru/Yanlış seçimi */}
       <div className="flex items-center gap-6 pl-1 pt-1">
