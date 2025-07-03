@@ -10,19 +10,24 @@ export const initialState = {
 export const formReducer = (state, action) => {
   switch (action.type) {
     case "ADD_ELEMENT":
-      return {
-        ...state,
-        elements: [
-          ...state.elements,
-          {
+  return {
+    ...state,
+    elements: [
+      ...state.elements,
+      action.payload === "multiChoice"
+        ? {
             id: Date.now(),
-            type: action.payload.type,
-        
+            type: action.payload,
             value: null,
-            options: action.payload.type === "multiChoice" ? [""] : undefined,
+            options: [],
+          }
+        : {
+            id: Date.now(),
+            type: action.payload,
+            value: null,
           },
-        ],
-      };
+    ],
+  };
     case "DELETE_ELEMENT":
       return {
         ...state,

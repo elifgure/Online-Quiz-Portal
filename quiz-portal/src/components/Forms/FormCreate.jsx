@@ -20,9 +20,14 @@ import { fieldTypes } from "../../data/fieldTypes";
 import { useReducer } from "react";
 import { formReducer, initialState } from "../../reducers/formReducer";
 import DynamicField from "./DynamicField";
+import { saveQuiz } from "../../features/Quizzes/quizService";
+import {useAuth} from "../../context/AuthContext"
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const FormCreate = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
+  const navigate = useNavigate()
 
   const addFormElement = (fieldType) => {
     dispatch({ type: "ADD_ELEMENT", payload: fieldType });
@@ -39,7 +44,28 @@ const FormCreate = () => {
   const handleElementOptionsChange = (id, options) => {
     dispatch({ type: "UPDATE_ELEMENT_OPTIONS", payload: { id, options } });
   };
-
+ 
+  const {user} = useAuth()
+  const handleSave = async () => {
+    const quizData = {
+      title: state.title,
+      duration: Number(state.duration),
+      createdBy: user?.uid || "anonymous",
+      elements: state.elements,
+    };
+    // console.log(quizData);
+    
+    const result = await saveQuiz(quizData);
+    if (result.success) {
+      toast.success("Quiz başarıyla kaydedildi!");
+      navigate("my-quiz")
+   
+    } else {
+      toast.error("Quiz kaydedilemedi!");
+      console.log(result);
+      
+    }
+  };
   const renderFormElement = (element) => {
     return (
       <DynamicField
@@ -53,7 +79,9 @@ const FormCreate = () => {
         options={element.options}
         onChange={(value) => handleElementChange(element.id, value)}
         onLabelChange={(label) => handleElementLabelChange(element.id, label)}
-        onOptionsChange={(options) => handleElementOptionsChange(element.id, options)}
+        onOptionsChange={(options) =>
+          handleElementOptionsChange(element.id, options)
+        }
         onDelete={() => handleDeleteElement(element.id)}
       />
     );
@@ -105,11 +133,14 @@ const FormCreate = () => {
               <Eye className="w-4 h-4 text-purple-500" />
               Önizle
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-orange-50/70 rounded-lg transition-all duration-200 font-medium">
+            <button onClick={handleSave} className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-orange-50/70 rounded-lg transition-all duration-200 font-medium">
               <Save className="w-4 h-4 text-orange-500" />
               Kaydet
             </button>
-            <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            <button
+              
+              className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
               <Share2 className="w-4 h-4" />
               Paylaş
             </button>
@@ -175,7 +206,7 @@ const FormCreate = () => {
                     return (
                       <button
                         key={fieldType.type}
-                        onClick={() => addFormElement(fieldType)}
+                        onClick={() => addFormElement(fieldType.type)}
                         className="flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-purple-50/70 hover:to-pink-50/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-purple-200/50 hover:shadow-sm"
                       >
                         <div

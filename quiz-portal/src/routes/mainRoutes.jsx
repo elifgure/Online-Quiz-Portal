@@ -5,6 +5,7 @@ import LandingPage from "../pages/LandingPage";
 import QuizListPage from "../pages/QuizListPage";
 import QuizPage from "../pages/Student/QuizPage";
 import StudentPage from "../pages/Student/StudentPage";
+import MyQuiz from "../pages/Teacher/MyQuiz";
 import TeacherPage from "../pages/Teacher/TeacherPage";
 
 const mainRoutes =[
@@ -34,6 +35,10 @@ const mainRoutes =[
     {
         path:"teacher",
         element:<TeacherPage />
+    },
+    {
+        path:"my-quiz",
+        element:<MyQuiz />
     }
 ]
 export default mainRoutes;
