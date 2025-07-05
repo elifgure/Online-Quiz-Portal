@@ -9,7 +9,7 @@ const StudentLayout = () => {
     {
       title: "Sınavlarım",
       icon: Pencil,
-      path: "/my-quizzes",
+      path: "/student-quizzes",
     },
     {
       title: "Raporlarım",
@@ -42,7 +42,7 @@ const StudentLayout = () => {
         {/* Menu Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
           {menuItems.map((item, index) => (
-            <div
+            <Link to={item.path}
               key={index}
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group border border-purple-200 hover:border-purple-400 hover:-translate-y-2"
             >
@@ -81,7 +81,7 @@ const StudentLayout = () => {
                     : "bg-gradient-to-r from-orange-500 to-red-500"
                 } rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}
               ></div>
-            </div>
+            </Link>
           ))}
 
           {/* Quick Stats Card */}

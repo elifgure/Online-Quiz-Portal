@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false }) => {
+const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false,label }) => {
   // Her bir radio grubunu benzersiz kılmak için id kullanıyoruz
   const radioGroupName = `boolean-answer-${id}`;
 
@@ -11,7 +11,7 @@ const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false }
       !isPreview && (
          <input
         type="text"
-    
+    value={label}
         onChange={(e) => onLabelChange(e.target.value)}
         placeholder="Doğru/Yanlış sorusunu buraya yazın"
         className="border px-3 py-2 rounded w-full font-semibold"

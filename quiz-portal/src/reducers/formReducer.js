@@ -1,3 +1,4 @@
+
 import React from "react";
 // import MultiChoice from "../components/Forms/FormElements/MultiChoice";
 
@@ -71,17 +72,17 @@ export const formReducer = (state, action) => {
         ...state,
         duration: action.payload,
       };
+      case "SET_INITIAL_STATE":
+        return{
+        
+          title:action.payload.title,
+          duration:action.payload.duration,
+          category:action.payload.category,
+          elements:action.payload.elements || [],
+        }
     case "UPDATE_CATEGORY":
       return { ...state, category: action.payload };
-    // case "multiChoice":
-      // return (
-      //   <MultiChoice
-      //     label={action.payload.label}
-      //     onLabelChange={action.payload.onLabelChange}
-      //     options={action.payload.options}
-      //     onOptionsChange={action.payload.onOptionsChange}
-      //   />
-      // );
+   
     default:
       return state;
   }

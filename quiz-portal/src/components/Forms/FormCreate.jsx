@@ -17,17 +17,30 @@ import {
 } from "lucide-react";
 
 import { fieldTypes } from "../../data/fieldTypes";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { formReducer, initialState } from "../../reducers/formReducer";
 import DynamicField from "./DynamicField";
-import { saveQuiz } from "../../features/Quizzes/quizService";
+import { saveQuiz, updateQuiz } from "../../features/Quizzes/quizService";
 import {useAuth} from "../../context/AuthContext"
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import SingleQuiz from "../Teacher/SingleQuiz";
+import { useSelector } from "react-redux";
+import { clearQuizForm } from "../../redux/slices/quizFormSlice";
 
 const FormCreate = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
   const navigate = useNavigate()
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+const quiz = useSelector((state) => state.quizForm.quiz);
+
+  useEffect(() =>{
+    if(quiz){
+       console.log("Incoming quiz data from Redux:", quiz)
+      dispatch({type: "SET_INITIAL_STATE", payload:quiz})
+      dispatch(clearQuizForm())
+    }
+  }, [quiz])
 
   const addFormElement = (fieldType) => {
     dispatch({ type: "ADD_ELEMENT", payload: fieldType });
@@ -53,20 +66,26 @@ const FormCreate = () => {
       category: state.category,
       createdBy: user?.uid || "anonymous",
       elements: state.elements,
-    };
-    // console.log(quizData);
-    
-    const result = await saveQuiz(quizData);
-    if (result.success) {
-      toast.success("Quiz başarıyla kaydedildi!");
-      navigate("/my-quiz")
-   
-    } else {
-      toast.error("Quiz kaydedilemedi!");
-      console.log(result);
       
-    }
-  };
+    };
+    
+     let result;
+  if (quiz && quiz.id) {
+    // Düzenleme modu - güncelle
+    result = await updateQuiz(quiz.id, quizData);
+  } else {
+    // Yeni quiz oluşturma
+    result = await saveQuiz(quizData);
+  }
+
+  if (result.success) {
+    toast.success("Quiz başarıyla kaydedildi!");
+    navigate("/my-quiz");
+  } else {
+    toast.error("Quiz kaydedilemedi!");
+    console.log(result.error);
+  }
+};
   const renderFormElement = (element) => {
     return (
       <DynamicField
@@ -103,6 +122,45 @@ const FormCreate = () => {
   const updateCategory = (category) => {
     dispatch({ type: "UPDATE_CATEGORY", payload: category });
   };
+
+  const handlePreview = () => {
+    if (state.elements.length === 0) {
+      toast.warning("Önizleme için en az bir quiz elementi eklemelisiniz!");
+      return;
+    }
+    setIsPreviewMode(true);
+  };
+
+  const handleBackFromPreview = () => {
+    setIsPreviewMode(false);
+  };
+
+  // Preview quiz data
+  const previewQuizData = {
+    id: "preview",
+    title: state.title || "Quiz Başlığı",
+    duration: Number(state.duration) || 0,
+    category: state.category || "Genel",
+    createdBy: user?.uid || "anonymous",
+    elements: state.elements,
+  };
+
+  // If in preview mode, show the preview
+  if (isPreviewMode) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50 py-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          <button
+            onClick={handleBackFromPreview}
+            className="mb-4 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg shadow transition-all duration-200"
+          >
+            ← Düzenlemeye Geri Dön
+          </button>
+          <SingleQuiz quiz={previewQuizData} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50 relative">
@@ -141,7 +199,10 @@ const FormCreate = () => {
             />
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-purple-50/70 rounded-lg transition-all duration-200 font-medium">
+            <button 
+              onClick={handlePreview}
+              className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-purple-50/70 rounded-lg transition-all duration-200 font-medium"
+            >
               <Eye className="w-4 h-4 text-purple-500" />
               Önizle
             </button>

@@ -3,6 +3,10 @@ import { getQuizzesByUser, deleteQuizById } from "../../features/Quizzes/quizSer
 import { useAuth } from "../../context/AuthContext";
 import { Loader2, FileText, Trash2, Eye, Pencil } from "lucide-react";
 import SingleQuiz from "../../components/Teacher/SingleQuiz";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setQuizForEdit } from "../../redux/slices/quizFormSlice";
+import Header from "../../components/Layout/Header"
 
 const MyQuiz = () => {
   const { user } = useAuth();
@@ -10,6 +14,8 @@ const MyQuiz = () => {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
@@ -30,6 +36,10 @@ const MyQuiz = () => {
     }
     setDeletingId(null);
   };
+  const handleEdit = (quiz) =>{
+    dispatch(setQuizForEdit(quiz))
+    navigate("/create-quiz2")
+  }
 
   if (selectedQuiz) {
     return (
@@ -54,7 +64,10 @@ const MyQuiz = () => {
   }
 
   return (
+    <>
+     <Header />
     <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50 py-12 px-4">
+     
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-[#044c5c] mb-8 text-center">Oluşturduğum Quizler</h2>
         {quizzes.length === 0 ? (
@@ -97,7 +110,7 @@ const MyQuiz = () => {
                 </div>
                 <div className="flex gap-3 mt-4">
                   <button
-                    onClick={() => alert(`Düzenle: ${quiz.title}`)}
+                    onClick={() => handleEdit(quiz)}
                     className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all duration-200 font-semibold shadow hover:shadow-md"
                   >
                     <Pencil className="w-4 h-4" />
@@ -117,6 +130,7 @@ const MyQuiz = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 
