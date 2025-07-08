@@ -26,6 +26,16 @@ export const getQuizzesByUser = async (userId) => {
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getAllQuizzes = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "quizzes"));
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Quizler getirilemedi:", error);
+    return [];
+  }
+};
+
 export const deleteQuizById = async (quizId) => {
   try {
     await deleteDoc(doc(collection(db, "quizzes"), quizId));
