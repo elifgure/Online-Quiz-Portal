@@ -14,7 +14,7 @@ const mainRoutes =[
         path: "/",
         element:<LandingPage />,
     },{
-        path:"/quizzes",
+        path:"/quiz1",
         element:<QuizPage />
     },
     {

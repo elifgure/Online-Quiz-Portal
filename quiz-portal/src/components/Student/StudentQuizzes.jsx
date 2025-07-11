@@ -1,16 +1,21 @@
 import { BookOpen, Clock, Play, LogOut } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { auth } from "../../lib/fireBase";
 import { signOut } from "firebase/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAllQuizzes } from "../../features/Quizzes/quizService";
 import { Loader2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setActiveQuiz } from "../../redux/slices/activeQuizSlice";
 
 const StudentQuizzes = () => {
   const { user, isAuthenticated } = useAuth();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+ 
   
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -76,6 +81,11 @@ const StudentQuizzes = () => {
       'from-pink-500 to-rose-500'
     ];
     return colors[index % colors.length];
+  };
+
+  const handleStartQuiz = (quiz) => {
+    dispatch(setActiveQuiz(quiz));
+    navigate("/quiz1");
   };
 
   if (loading) {
@@ -166,7 +176,10 @@ const StudentQuizzes = () => {
                   </div>
 
                   {/* Start Quiz Button */}
-                  <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group-hover:scale-105">
+                  <button
+                    onClick={() => handleStartQuiz(quiz)}
+                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group-hover:scale-105"
+                  >
                     <Play className="h-4 w-4" />
                     <span>Quizi Başlat</span>
                   </button>

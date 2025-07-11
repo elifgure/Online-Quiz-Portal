@@ -1,8 +1,6 @@
-import React from 'react'
-import OrnekQuiz2 from '../../components/Quiz/OrnekQuiz2'
-import QuizCard from '../../components/Quiz/OrnekQuiz'
 import { Link } from 'react-router-dom'
 import logo from "../../assets/logo-transparent.png"
+import OrnekQuiz from '../../components/Quiz/OrnekQuiz'
 
 const QuizPage = () => {
   return (
@@ -16,7 +14,7 @@ const QuizPage = () => {
         <Link to="/">Giriş</Link>
         </nav>
         </header>
-         <QuizCard />
+         <OrnekQuiz />
     </>
    
   )
