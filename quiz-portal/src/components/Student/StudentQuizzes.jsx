@@ -21,7 +21,6 @@ const StudentQuizzes = () => {
     const fetchQuizzes = async () => {
       try {
         const quizzesData = await getAllQuizzes();
-        console.log("Gelen quizler:", quizzesData);
         setQuizzes(quizzesData);
       } catch (error) {
         console.error("Quizler yüklenirken hata:", error);

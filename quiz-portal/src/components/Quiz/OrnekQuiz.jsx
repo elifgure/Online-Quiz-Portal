@@ -9,15 +9,19 @@ import {
   Button,
   Box,
   LinearProgress,
+  TextField,
+  Checkbox,
 } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const OrnekQuiz = () => {
   const activeQuiz = useSelector((state) => state.activeQuiz);
   const questions = activeQuiz?.elements || [];
+  console.log("activeQuiz:", activeQuiz);
+console.log("questions:", questions);
   const duration = Number(activeQuiz?.duration) || 60; // dakika
   const TOTAL_TIME = duration * 60; // saniye
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -26,17 +30,14 @@ const OrnekQuiz = () => {
   const [score, setScore] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(TOTAL_TIME);
   const [isTimeUp, setIsTimeUp] = useState(false);
-  
+  const navigate = useNavigate();
 
-
-  if (!activeQuiz || !questions.length) {
-  return (
-    <Typography align="center" mt={10} variant="h6">
-      Quiz bilgisi yüklenemedi. Lütfen <Link to="/student-quizzes">buraya</Link> tıklayarak tekrar deneyin.
-    </Typography>
-  );
-}
-
+  useEffect(() => {
+    if (!activeQuiz || !questions.length) {
+      navigate("/student-quizzes");
+    }
+    // eslint-disable-next-line
+  }, [activeQuiz, questions, navigate]);
 
   useEffect(() => {
     if (timeRemaining > 0 && !showResults) {
@@ -51,7 +52,11 @@ const OrnekQuiz = () => {
   }, [timeRemaining, showResults]);
 
   if (!activeQuiz || !questions.length) {
-    return null; // yönlendirme çalışacak
+    return (
+      <Typography align="center" mt={10} variant="h6">
+        Quiz bilgisi yüklenemedi. Lütfen <Link to="/student-quizzes">buraya</Link> tıklayarak tekrar deneyin.
+      </Typography>
+    );
   }
 
   const currentQuestionData = questions[currentQuestion];
@@ -81,6 +86,76 @@ const OrnekQuiz = () => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  const optionLetters = ["A", "B", "C", "D", "E", "F", "G"];
+  const renderAnswerInput = () => {
+    switch (currentQuestionData.type) {
+      case "multiChoice":
+        return (
+          <RadioGroup
+            value={selectedAnswer}
+            onChange={handleAnswerSelect}
+            sx={{ my: 2 }}
+          >
+            {currentQuestionData.options?.map((option, index) => (
+              <FormControlLabel
+                key={index}
+                value={index}
+                label={`${optionLetters[index] || ""}) ${option}`}
+                control={<Radio />}
+                sx={{ mb: 1 }}
+              />
+            ))}
+          </RadioGroup>
+        );
+      case "shortText":
+        return (
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Cevabınız"
+            value={selectedAnswer || ""}
+            onChange={(e) => setSelectedAnswer(e.target.value)}
+            sx={{ my: 2 }}
+          />
+        );
+      case "longText":
+        return (
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Cevabınız"
+            multiline
+            minRows={3}
+            value={selectedAnswer || ""}
+            onChange={(e) => setSelectedAnswer(e.target.value)}
+            sx={{ my: 2 }}
+          />
+        );
+      case "boolean":
+        return (
+          <RadioGroup
+            value={selectedAnswer}
+            onChange={(e) => setSelectedAnswer(e.target.value)}
+            sx={{ my: 2 }}
+          >
+            <FormControlLabel value="true" control={<Radio />} label="Doğru" />
+            <FormControlLabel value="false" control={<Radio />} label="Yanlış" />
+          </RadioGroup>
+        );
+      default:
+        return (
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Cevabınız"
+            value={selectedAnswer || ""}
+            onChange={(e) => setSelectedAnswer(e.target.value)}
+            sx={{ my: 2 }}
+          />
+        );
+    }
   };
 
   if (showResults) {
@@ -131,28 +206,10 @@ const OrnekQuiz = () => {
         <Typography variant="body1" gutterBottom>
           {currentQuestionData.label || currentQuestionData.question}
         </Typography>
-
-        {/* Sadece çoktan seçmeli için örnek */}
-        {currentQuestionData.options && (
-          <RadioGroup
-            value={selectedAnswer}
-            onChange={handleAnswerSelect}
-            sx={{ my: 2 }}
-          >
-            {currentQuestionData.options.map((option, index) => (
-              <FormControlLabel
-                key={index}
-                value={index}
-                label={option}
-                control={<Radio />}
-                sx={{ mb: 1 }}
-              />
-            ))}
-          </RadioGroup>
-        )}
+        {renderAnswerInput()}
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-          <Typography variant="body2">Skor: {score}</Typography>
+    
           <Button
             variant="contained"
             color="primary"
