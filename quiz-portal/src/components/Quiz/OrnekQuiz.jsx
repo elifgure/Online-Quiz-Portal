@@ -12,7 +12,8 @@ import {
 } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 const OrnekQuiz = () => {
   const activeQuiz = useSelector((state) => state.activeQuiz);
@@ -25,13 +26,17 @@ const OrnekQuiz = () => {
   const [score, setScore] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(TOTAL_TIME);
   const [isTimeUp, setIsTimeUp] = useState(false);
-  const navigate = useNavigate();
+  
 
-useEffect(() => {
+
   if (!activeQuiz || !questions.length) {
-    navigate("quiz1");
-  }
-}, []);
+  return (
+    <Typography align="center" mt={10} variant="h6">
+      Quiz bilgisi yüklenemedi. Lütfen <Link to="/student-quizzes">buraya</Link> tıklayarak tekrar deneyin.
+    </Typography>
+  );
+}
+
 
   useEffect(() => {
     if (timeRemaining > 0 && !showResults) {

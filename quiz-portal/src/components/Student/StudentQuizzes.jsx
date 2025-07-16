@@ -21,6 +21,7 @@ const StudentQuizzes = () => {
     const fetchQuizzes = async () => {
       try {
         const quizzesData = await getAllQuizzes();
+        console.log("Gelen quizler:", quizzesData);
         setQuizzes(quizzesData);
       } catch (error) {
         console.error("Quizler yüklenirken hata:", error);
@@ -133,6 +134,7 @@ const StudentQuizzes = () => {
             </div>
           ) : (
             quizzes.map((quiz, index) => (
+              console.log("Render edilen quiz:", quiz),
               <div
                 key={quiz.id}
                 className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group border border-purple-200 hover:border-purple-400 hover:-translate-y-2"
