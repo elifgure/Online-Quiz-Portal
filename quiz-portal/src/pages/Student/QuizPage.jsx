@@ -16,7 +16,7 @@ const QuizPage = () => {
       <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-pink-400/15 rounded-full blur-xl z-0"></div>
       <header className="relative z-10 w-full bg-white/90 shadow-sm px-6 flex items-center justify-between py-3">
         <Link to="/" className="logo flex items-center gap-2">
-          <img src={logo} alt="Quiz Portal Logo" className='h-16 w-16 object-contain' />
+          <img src={logo} alt="Quiz Portal Logo" className='h-20 w-20 object-cover transition-all duration-300 hover:scale-105 max-h-16' />
         </Link>
         <nav className="flex items-center gap-4">
           <Link to="/student-quizzes" className="text-gray-700 hover:text-purple-600 transition font-medium">Quizlerim</Link>

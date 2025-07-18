@@ -79,28 +79,43 @@ const DynamicField = ({
         return (
           <ShortText
             label={label}
+            answer={value} // value'yu answer olarak geçiyoruz
             onLabelChange={onLabelChange}
+            onAnswerChange={onChange} // onChange'i onAnswerChange olarak geçiyoruz
+            isPreview={false}
           />
         );
       case "longText":
-        return <LongText label={label} onLabelChange={onLabelChange} />;
-      case "boolean":
         return (
-          <BooleanField
-            id={id}
+          <LongText
             label={label}
+            answer={value}
             onLabelChange={onLabelChange}
-            value={value}
-            onChange={onChange}
+            onAnswerChange={onChange}
+            isPreview={false}
           />
         );
       case "multiChoice":
         return (
           <MultiChoice
             label={label}
+            answer={value}
             onLabelChange={onLabelChange}
             options={options || [""]}
             onOptionsChange={onOptionsChange}
+            onAnswerChange={onChange}
+            isPreview={false}
+          />
+        );
+      case "boolean":
+        return (
+          <BooleanField
+            id={id}
+            label={label}
+            value={value}
+            onLabelChange={onLabelChange}
+            onChange={onChange}
+            isPreview={false}
           />
         );
       default:

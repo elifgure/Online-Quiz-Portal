@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react"; // useMemo'yu import edin
 import {
   Card,
   CardContent,
@@ -19,7 +19,13 @@ import { Link, useNavigate } from "react-router-dom";
 
 const OrnekQuiz = () => {
   const activeQuiz = useSelector((state) => state.activeQuiz);
-  const questions = activeQuiz?.elements || [];
+  
+  // her renderda gereksiz tetiklememesi için.
+  const questions = useMemo(() => 
+    activeQuiz?.elements || [], 
+    [activeQuiz?.elements]
+  );
+
   const duration = Number(activeQuiz?.duration) || 60; // dakika
   const TOTAL_TIME = duration * 60; // saniye
   const [currentQuestion, setCurrentQuestion] = useState(0);

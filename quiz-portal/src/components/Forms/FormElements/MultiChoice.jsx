@@ -7,6 +7,8 @@ const MultiChoice = ({
   onLabelChange,
   options = [''],
   onOptionsChange,
+  answer,
+  onAnswerChange,
   isPreview = false,
 }) => {
   const handleOptionChange = (idx, value) => {
@@ -37,13 +39,23 @@ const MultiChoice = ({
       {/* Şıklar */}
       {options.map((opt, idx) => (
         <div key={idx} className="flex items-center gap-2">
+          <input
+            type="radio"
+            name={`question-${label}`}
+            value={alphabet[idx]}
+            checked={answer === alphabet[idx]}
+            onChange={(e) => onAnswerChange(e.target.value)}
+            className="mr-2"
+          />
           <span className="font-bold w-6">{alphabet[idx]}.</span>
           <input
             type="text"
             value={opt}
             onChange={(e) => handleOptionChange(idx, e.target.value)}
             placeholder={`Şık ${alphabet[idx]}`}
-            className={`border px-3 py-2 rounded w-full ${isPreview ? 'bg-gray-100 text-gray-500' : ''}`}
+            className={`border px-3 py-2 rounded w-full ${
+              isPreview ? 'bg-gray-100 text-gray-500' : ''
+            }`}
             disabled={isPreview}
           />
         </div>

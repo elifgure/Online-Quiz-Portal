@@ -1,4 +1,3 @@
-
 import React from "react";
 // import MultiChoice from "../components/Forms/FormElements/MultiChoice";
 
@@ -21,12 +20,16 @@ export const formReducer = (state, action) => {
             id: Date.now(),
             type: action.payload,
             value: null,
+            label: "",
+            answer: "", // Bunu ekleyin
             options: [],
           }
         : {
             id: Date.now(),
             type: action.payload,
             value: null,
+            label: "",
+            answer: "", // Bunu ekleyin
           },
     ],
   };
@@ -82,7 +85,15 @@ export const formReducer = (state, action) => {
         }
     case "UPDATE_CATEGORY":
       return { ...state, category: action.payload };
-   
+    case "UPDATE_ELEMENT_ANSWER":
+  return {
+    ...state,
+    elements: state.elements.map((el) =>
+      el.id === action.payload.id
+        ? { ...el, answer: action.payload.answer }
+        : el
+    ),
+  };
     default:
       return state;
   }

@@ -1,46 +1,36 @@
+import { useEffect, useReducer, useState } from "react";
 import {
   Component,
   Palette,
-  Search,
   ChevronDown,
-  Tag,
-  Type,
-  FileText,
-  Circle,
-  HelpCircle,
-  Check,
   Plus,
   Eye,
   Save,
   Share2,
-  Layers,
 } from "lucide-react";
-
 import { fieldTypes } from "../../data/fieldTypes";
-import { useEffect, useReducer, useState } from "react";
 import { formReducer, initialState } from "../../reducers/formReducer";
 import DynamicField from "./DynamicField";
 import { saveQuiz, updateQuiz } from "../../features/Quizzes/quizService";
-import {useAuth} from "../../context/AuthContext"
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SingleQuiz from "../Teacher/SingleQuiz";
 import { useSelector } from "react-redux";
 import { clearQuizForm } from "../../redux/slices/quizFormSlice";
 
 const FormCreate = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isPreviewMode, setIsPreviewMode] = useState(false);
-const quiz = useSelector((state) => state.quizForm.quiz);
+  const quiz = useSelector((state) => state.quizForm.quiz);
 
-  useEffect(() =>{
-    if(quiz){
-       console.log("Incoming quiz data from Redux:", quiz)
-      dispatch({type: "SET_INITIAL_STATE", payload:quiz})
-      dispatch(clearQuizForm())
+  useEffect(() => {
+    if (quiz) {
+      dispatch({ type: "SET_INITIAL_STATE", payload: quiz });
+      dispatch(clearQuizForm());
     }
-  }, [quiz])
+  }, [quiz]);
 
   const addFormElement = (fieldType) => {
     dispatch({ type: "ADD_ELEMENT", payload: fieldType });
@@ -57,8 +47,12 @@ const quiz = useSelector((state) => state.quizForm.quiz);
   const handleElementOptionsChange = (id, options) => {
     dispatch({ type: "UPDATE_ELEMENT_OPTIONS", payload: { id, options } });
   };
- 
-  const {user} = useAuth()
+
+  const handleElementAnswerChange = (id, answer) => {
+    dispatch({ type: "UPDATE_ELEMENT_ANSWER", payload: { id, answer } });
+  };
+
+  const { user } = useAuth();
   const handleSave = async () => {
     const quizData = {
       title: state.title,
@@ -66,26 +60,25 @@ const quiz = useSelector((state) => state.quizForm.quiz);
       category: state.category,
       createdBy: user?.uid || "anonymous",
       elements: state.elements,
-      
     };
-    
-     let result;
-  if (quiz && quiz.id) {
-    // Düzenleme modu - güncelle
-    result = await updateQuiz(quiz.id, quizData);
-  } else {
-    // Yeni quiz oluşturma
-    result = await saveQuiz(quizData);
-  }
 
-  if (result.success) {
-    toast.success("Quiz başarıyla kaydedildi!");
-    navigate("/my-quiz");
-  } else {
-    toast.error("Quiz kaydedilemedi!");
-    console.log(result.error);
-  }
-};
+    let result;
+    if (quiz && quiz.id) {
+      // Düzenleme modu - güncelle
+      result = await updateQuiz(quiz.id, quizData);
+    } else {
+      // Yeni quiz oluşturma
+      result = await saveQuiz(quizData);
+    }
+
+    if (result.success) {
+      toast.success("Quiz başarıyla kaydedildi!");
+      navigate("/my-quiz");
+    } else {
+      toast.error("Quiz kaydedilemedi!");
+      console.log(result.error);
+    }
+  };
   const renderFormElement = (element) => {
     return (
       <DynamicField
@@ -93,12 +86,14 @@ const quiz = useSelector((state) => state.quizForm.quiz);
         id={element.id}
         type={element.type}
         label={element.label}
+        answer={element.answer} // Bunu ekleyin
         placeholder={element.placeholder}
         required={element.required}
         value={element.value}
         options={element.options}
         onChange={(value) => handleElementChange(element.id, value)}
         onLabelChange={(label) => handleElementLabelChange(element.id, label)}
+        onAnswerChange={(answer) => handleElementAnswerChange(element.id, answer)} // Bunu ekleyin
         onOptionsChange={(options) =>
           handleElementOptionsChange(element.id, options)
         }
@@ -189,7 +184,7 @@ const quiz = useSelector((state) => state.quizForm.quiz);
               value={state.duration}
               onChange={(e) => updateDuration(e.target.value)}
             />
-           
+
             <input
               type="text"
               className="w-40 text-md bg-white border border-purple-200/50 outline-none px-3 py-2 rounded-lg transition-all duration-200 text-[#044c5c] placeholder-[#37747c]"
@@ -199,21 +194,21 @@ const quiz = useSelector((state) => state.quizForm.quiz);
             />
           </div>
           <div className="flex items-center gap-3">
-            <button 
+            <button
               onClick={handlePreview}
               className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-purple-50/70 rounded-lg transition-all duration-200 font-medium"
             >
               <Eye className="w-4 h-4 text-purple-500" />
               Önizle
             </button>
-            <button onClick={handleSave} className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-orange-50/70 rounded-lg transition-all duration-200 font-medium">
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-2 px-4 py-2 text-[#044c5c] hover:bg-orange-50/70 rounded-lg transition-all duration-200 font-medium"
+            >
               <Save className="w-4 h-4 text-orange-500" />
               Kaydet
             </button>
-            <button
-              
-              className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
+            <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
               <Share2 className="w-4 h-4" />
               Paylaş
             </button>

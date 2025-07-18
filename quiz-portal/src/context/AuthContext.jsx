@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
 
           if (teacherSnap.exists()) {
             role = "teacher";
+              console.log("Rol atandı: teacher");
           } else {
             // Öğrenci mi diye kontrol et
             const studentRef = doc(db, "students", firebaseUser.uid);
@@ -49,7 +50,9 @@ export const AuthProvider = ({ children }) => {
             lastLoginAt: firebaseUser.metadata.lastSignInTime,
             providerData: firebaseUser.providerData,
             role: role, // 🔥 En önemli kısım!
+            
           };
+               console.log("userData rolü:", userData.role);
 
           setUser(userData);
         } catch (err) {
@@ -73,6 +76,7 @@ export const AuthProvider = ({ children }) => {
     userEmail: user?.email,
     userName: user?.displayName,
     userId: user?.uid,
+     role: user?.role || null, 
   };
 
   return (

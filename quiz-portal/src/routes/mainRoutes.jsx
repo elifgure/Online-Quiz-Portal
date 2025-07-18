@@ -1,6 +1,5 @@
 
 import FormCreate from "../components/Forms/FormCreate";
-import QuizCard from "../components/Quiz/OrnekQuiz";
 import LandingPage from "../pages/LandingPage";
 import QuizListPage from "../pages/QuizListPage";
 import QuizPage from "../pages/Student/QuizPage";

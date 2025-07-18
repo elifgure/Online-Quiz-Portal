@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false,label }) => {
+const BooleanField = ({ id, value, onLabelChange, onChange, isPreview = false, label }) => {
   // Her bir radio grubunu benzersiz kılmak için id kullanıyoruz
   const radioGroupName = `boolean-answer-${id}`;
 
@@ -11,7 +11,7 @@ const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false,l
       !isPreview && (
          <input
         type="text"
-    value={label}
+    value={label || ''}
         onChange={(e) => onLabelChange(e.target.value)}
         placeholder="Doğru/Yanlış sorusunu buraya yazın"
         className="border px-3 py-2 rounded w-full font-semibold"
@@ -28,6 +28,7 @@ const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false,l
             value="true"
             checked={value === 'true'}
             onChange={(e) => onChange(e.target.value)}
+            disabled={isPreview}
             className="form-radio h-5 w-5 text-green-600 focus:ring-green-500"
           />
           <span className="font-semibold text-lg text-green-700">Doğru</span>
@@ -39,6 +40,7 @@ const BooleanField = ({ id, value, onLabelChange,  onChange, isPreview = false,l
             value="false"
             checked={value === 'false'}
             onChange={(e) => onChange(e.target.value)}
+            disabled={isPreview}
             className="form-radio h-5 w-5 text-red-600 focus:ring-red-500"
           />
           <span className="font-semibold text-lg text-red-700">Yanlış</span>
