@@ -7,6 +7,7 @@ import StudentPage from "../pages/Student/StudentPage";
 import StudentQuizzesPage from "../components/Student/StudentQuizzes";
 import MyQuiz from "../pages/Teacher/MyQuiz";
 import TeacherPage from "../pages/Teacher/TeacherPage";
+import ResultsPage from "../pages/Student/ResultsPage";
 
 const mainRoutes =[
     {
@@ -40,6 +41,9 @@ const mainRoutes =[
     {
         path:"student-quizzes",
         element:<StudentQuizzesPage />
+    },{
+        path:"/results",
+        element:<ResultsPage />
     }
 
 ]

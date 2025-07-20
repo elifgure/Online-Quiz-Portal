@@ -20,7 +20,7 @@ import { saveStudentResult } from "../../features/Quizzes/resultService";
 
 const OrnekQuiz = () => {
   const activeQuiz = useSelector((state) => state.activeQuiz);
-  const {user} = useAuth()
+  const { user } = useAuth();
 
   // her renderda gereksiz tetiklememesi için.
   const questions = useMemo(
@@ -206,12 +206,15 @@ const OrnekQuiz = () => {
     const resultToSave = {
       studentId: user.uid,
       quizId: activeQuiz.id || "unknown",
+      quizTitle: activeQuiz.title || "Bilinmeyen Quiz",
+      category: activeQuiz.category || "Genel",
       score: quizResults.score,
       totalQuestions: questions.length,
       details: quizResults.details,
       studentEmail: user.email,
     };
-    saveStudentResult(resultToSave)
+      console.log("Sonuç kaydediliyor:", resultToSave);
+    saveStudentResult(resultToSave);
 
     return (
       <Card
@@ -436,7 +439,7 @@ const OrnekQuiz = () => {
 
           <Button
             variant="contained"
-            onClick={() => navigate("/student-quizzes")}
+            onClick={() => navigate("/results")}
             sx={{
               mt: 4,
               py: 2,
@@ -459,7 +462,7 @@ const OrnekQuiz = () => {
             }}
             fullWidth
           >
-            Quizlere Dön
+            Sonuçlarımı Gör
           </Button>
         </CardContent>
       </Card>

@@ -28,7 +28,7 @@ export const getResultsByStudent = async (studentId) => {
     const querySnapshot = await getDocs(q);
     const result = querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data,
+      ...doc.data(),
     }));
     return result;
   } catch (error) {
