@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
             role: role, // 🔥 En önemli kısım!
             
           };
-               console.log("userData rolü:", userData.role);
+        
 
           setUser(userData);
         } catch (err) {
