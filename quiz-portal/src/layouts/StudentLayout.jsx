@@ -14,7 +14,7 @@ const StudentLayout = () => {
     {
       title: "Raporlarım",
       icon: BarChart3,
-      path: "/reports",
+      path: "/results",
     },
   ];
 
