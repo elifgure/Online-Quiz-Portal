@@ -184,7 +184,7 @@ const OrnekQuiz = () => {
       const userAnswer = answers[index] || selectedAnswer;
       const teacherAnswer = question.value; // Değişiklik burada
 
-      const isCorrect = userAnswer === teacherAnswer;
+      const isCorrect = userAnswer.toLowerCase() === teacherAnswer.toLowerCase();
 
       if (isCorrect) totalScore++;
 
@@ -200,22 +200,29 @@ const OrnekQuiz = () => {
     return { score: totalScore, details: results };
   };
 
+  // showResults true olduğunda çalışacak useEffect
+  useEffect(() => {
+    if (showResults) {
+      const quizResults = checkAnswers();
+      const resultToSave = {
+        studentId: user.uid,
+        quizId: activeQuiz.id || "unknown",
+        quizTitle: activeQuiz.title || "Bilinmeyen Quiz",
+        category: activeQuiz.category || "Genel",
+        score: quizResults.score,
+        totalQuestions: questions.length,
+        details: quizResults.details,
+        studentEmail: user.email,
+      };
+      console.log("Sonuç kaydediliyor:", resultToSave);
+      saveStudentResult(resultToSave);
+    }
+  }, [showResults]); // sadece showResults true olduğunda çalışır
+
   // showResults true olduğunda gösterilecek kart
   if (showResults) {
     const quizResults = checkAnswers();
-    const resultToSave = {
-      studentId: user.uid,
-      quizId: activeQuiz.id || "unknown",
-      quizTitle: activeQuiz.title || "Bilinmeyen Quiz",
-      category: activeQuiz.category || "Genel",
-      score: quizResults.score,
-      totalQuestions: questions.length,
-      details: quizResults.details,
-      studentEmail: user.email,
-    };
-      console.log("Sonuç kaydediliyor:", resultToSave);
-    saveStudentResult(resultToSave);
-
+    
     return (
       <Card
         sx={{

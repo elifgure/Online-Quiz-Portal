@@ -24,16 +24,21 @@ export const saveStudentResult = async (resultData) => {
 export const getResultsByStudent = async (studentId) => {
   try {
     const resultsRef = collection(db, "results");
-    const q = query(resultsRef, where("studentId", "==", studentId));
+    const q = query(
+      resultsRef,
+      where("studentId", "==", studentId),
+     
+    );
+
     const querySnapshot = await getDocs(q);
-    const result = querySnapshot.docs.map((doc) => ({
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
+      createdAt: doc.data().createdAt?.toDate() || new Date(),
     }));
-    return result;
   } catch (error) {
-    console.error("Hata Oluştu", error);
-    throw error;
+    console.error("Sonuçlar getirilemedi:", error);
+    return [];
   }
 };
 

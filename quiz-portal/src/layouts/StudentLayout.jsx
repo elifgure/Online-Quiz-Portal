@@ -1,10 +1,43 @@
 import { BarChart3, Pencil, LogOut, User, BookOpen } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import Header from "../components/Layout/Header";
+import { useAuth } from "../context/AuthContext";
+import { getResultsByStudent } from "../features/Quizzes/resultService";
 
 const StudentLayout = () => {
+  const { user } = useAuth();
+  const [averageScore, setAverageScore] = useState(0);
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const studentResults = await getResultsByStudent(user.uid);
+        setResults(studentResults);
+
+        // Ortalama hesaplama
+        if (studentResults.length > 0) {
+          const totalScore = studentResults.reduce((acc, result) => {
+            // Her quizin yüzdelik başarısını hesapla
+            const percentage = (result.score / result.totalQuestions) * 100;
+            return acc + percentage;
+          }, 0);
+
+          const average = Math.round(totalScore / studentResults.length);
+          setAverageScore(average);
+        }
+      } catch (error) {
+        console.error("Sonuçlar getirilemedi:", error);
+      }
+    };
+
+    fetchResults();
+  }, [user]);
+
   const menuItems = [
     {
       title: "Sınavlarım",
@@ -42,7 +75,8 @@ const StudentLayout = () => {
         {/* Menu Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
           {menuItems.map((item, index) => (
-            <Link to={item.path}
+            <Link
+              to={item.path}
               key={index}
               className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group border border-purple-200 hover:border-purple-400 hover:-translate-y-2"
             >
@@ -92,13 +126,19 @@ const StudentLayout = () => {
                   <BarChart3 className="h-8 w-8 text-white" />
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold">85%</div>
-                  <div className="text-sm opacity-90">Ortalama</div>
+                  <div className="text-2xl font-bold">
+                    {results.length > 0 ? `${averageScore}%` : "Henüz sınav yok"}
+                  </div>
+                  <div className="text-sm opacity-90">
+                    {results.length} Sınav
+                  </div>
                 </div>
               </div>
               <h3 className="text-xl font-semibold mb-2">Genel Başarı</h3>
               <p className="text-white/90 text-sm">
-                Tüm sınavlardaki genel performansınız
+                {results.length > 0
+                  ? `${results.length} sınavdaki genel performansınız`
+                  : "Henüz sınav sonucunuz bulunmuyor"}
               </p>
             </div>
           </div>
