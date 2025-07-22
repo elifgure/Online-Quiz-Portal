@@ -1,4 +1,3 @@
-
 import FormCreate from "../components/Forms/FormCreate";
 import LandingPage from "../pages/LandingPage";
 import QuizListPage from "../pages/QuizListPage";
@@ -8,43 +7,49 @@ import StudentQuizzesPage from "../components/Student/StudentQuizzes";
 import MyQuiz from "../pages/Teacher/MyQuiz";
 import TeacherPage from "../pages/Teacher/TeacherPage";
 import ResultsPage from "../pages/Student/ResultsPage";
+import ReportsPage from "../pages/Teacher/ReportsPage";
 
-const mainRoutes =[
-    {
-        path: "/",
-        element:<LandingPage />,
-    },{
-        path:"/quiz1",
-        element:<QuizPage />
-    },
-    {
-        path:"/student",
-        element:<StudentPage/>
-    },
-    {
-        path:"quiz-list",
-        element: <QuizListPage />
-    },
-   
-      {
-        path:"create-quiz2",
-        element:<FormCreate />
-    },
-    {
-        path:"teacher",
-        element:<TeacherPage />
-    },
-    {
-        path:"my-quiz",
-        element:<MyQuiz />
-    },
-    {
-        path:"student-quizzes",
-        element:<StudentQuizzesPage />
-    },{
-        path:"/results",
-        element:<ResultsPage />
-    }
+const mainRoutes = [
+  {
+    path: "/",
+    element: <LandingPage />,
+  },
+  {
+    path: "/quiz1",
+    element: <QuizPage />,
+  },
+  {
+    path: "/student",
+    element: <StudentPage />,
+  },
+  {
+    path: "quiz-list",
+    element: <QuizListPage />,
+  },
 
-]
+  {
+    path: "create-quiz2",
+    element: <FormCreate />,
+  },
+  {
+    path: "teacher",
+    element: <TeacherPage />,
+  },
+  {
+    path: "my-quiz",
+    element: <MyQuiz />,
+  },
+  {
+    path: "student-quizzes",
+    element: <StudentQuizzesPage />,
+  },
+  {
+    path: "/results",
+    element: <ResultsPage />,
+  },
+  {
+    path: "/reports",
+    element: <ReportsPage />,
+  },
+];
 export default mainRoutes;

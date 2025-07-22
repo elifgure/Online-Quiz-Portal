@@ -42,3 +42,22 @@ export const getResultsByStudent = async (studentId) => {
   }
 };
 
+// bütün sonuçları çekmek için kullanılan fonksiyon
+export const getAllResults = async () => {
+  try {
+    const resultsRef = collection(db, "results");
+    const querySnapshot = await getDocs(resultsRef);
+    const results = []
+    querySnapshot.forEach((doc) =>{
+      results.push({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date(),
+      })
+    })
+    return results;
+  } catch (error) {
+    console.error("Sonuçlar getirilemedi:", error);
+    throw error;
+  }
+}

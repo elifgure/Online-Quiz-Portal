@@ -25,7 +25,7 @@ const features = [
     title: "Sonuçlar",
     icon: <FileText className="w-10 h-10 text-green-500" />,
     desc: "Kullanıcıların quiz sonuçlarını inceleyin.",
-    link:"/results",
+    link:"/reports",
   },
   {
     title: "Performans Raporları",

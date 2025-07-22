@@ -1,6 +1,7 @@
-import { getResultsByStudent } from "../../features/Quizzes/resultService";
+import { getAllResults, getResultsByStudent } from "../../features/Quizzes/resultService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+// mevcut öğrenci sonuç fonksiyonu
 export const fetchStudentResults = createAsyncThunk(
   "results/fetchStudentResults",
   async (studentId, { rejectWithValue }) => {
@@ -12,6 +13,23 @@ export const fetchStudentResults = createAsyncThunk(
     }
   }
 );
+
+// tüm sonuçları yöneten fonksiyon
+export const fetchAllResults = createAsyncThunk(
+  "results/fetchAllResults",
+  async(_, {rejectWithValue}) => {
+    try {
+      const results = await getAllResults();
+      return results;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
+
+
+
+
 const resultsSlice = createSlice({
   name: "results",
   initialState: {
@@ -30,6 +48,18 @@ const resultsSlice = createSlice({
         state.items = action.payload;
       })
       .addCase(fetchStudentResults.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // Yeni cases
+      .addCase(fetchAllResults.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllResults.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.items = action.payload;
+      })
+      .addCase(fetchAllResults.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
