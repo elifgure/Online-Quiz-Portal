@@ -1,35 +1,43 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { getResultsByStudent } from "../../features/Quizzes/resultService";
+import { useDispatch, useSelector } from "react-redux";
 import ResultDetails from "../../components/Student/ResultDetails";
 import { Award, Calendar, BookOpen, Target } from "lucide-react";
 import Header from "../../components/Layout/Header";
+import { fetchStudentResults } from "../../redux/slices/resultsSlice";
 
 const ResultsPage = () => {
   const { userId } = useAuth();
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    items: results,
+    status,
+    error,
+  } = useSelector((state) => state.results);
+
+  const dispatch = useDispatch();
   const [openDetailsId, setOpenDetailsId] = useState(null);
 
   useEffect(() => {
-    const fetchResults = async () => {
-      if (!userId) return;
-      const data = await getResultsByStudent(userId);
-      setResults(data);
-      setLoading(false);
-    };
-
-    fetchResults();
-  }, [userId]);
+    if (userId) {
+      dispatch(fetchStudentResults(userId));
+    }
+  }, [dispatch, userId]);
 
   const toggleDetails = (id) => {
     setOpenDetailsId(openDetailsId === id ? null : id);
   };
 
-  if (loading) {
+  if (status === "loading") {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="text-[#37747c] text-lg">Sonuçlar Yükleniyor...</div>
+      </div>
+    );
+  }
+  if (status === "failed") {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-red-500">Hata: {error}</div>
       </div>
     );
   }
