@@ -88,10 +88,10 @@ export const formReducer = (state, action) => {
     case "UPDATE_ELEMENT_ANSWER":
   return {
     ...state,
-    elements: state.elements.map((el) =>
-      el.id === action.payload.id
-        ? { ...el, answer: action.payload.answer }
-        : el
+    elements: state.elements.map((element) =>
+      element.id === action.payload.id
+        ? { ...element, value: action.payload.value }
+        : element
     ),
   };
     default:

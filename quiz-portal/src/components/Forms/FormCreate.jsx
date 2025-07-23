@@ -49,11 +49,71 @@ const FormCreate = () => {
   };
 
   const handleElementAnswerChange = (id, answer) => {
-    dispatch({ type: "UPDATE_ELEMENT_ANSWER", payload: { id, answer } });
+    dispatch({
+      type: "UPDATE_ELEMENT_ANSWER",
+      payload: { id, answer: answer.toString },
+    });
   };
 
   const { user } = useAuth();
   const handleSave = async () => {
+    // Form validasyonu
+    if (!state.title?.trim()) {
+      toast.error("Quiz başlığı boş olamaz!");
+      return;
+    }
+
+    if (!state.duration || state.duration <= 0) {
+      toast.error("Geçerli bir süre giriniz!");
+      return;
+    }
+
+    if (!state.category?.trim()) {
+      toast.error("Kategori boş olamaz!");
+      return;
+    }
+
+    if (!state.elements || state.elements.length === 0) {
+      toast.error("En az bir soru eklemelisiniz!");
+      return;
+    }
+
+    // Tüm soruların gerekli alanlarının dolu olduğunu kontrol et
+    const invalidQuestions = state.elements.filter((element) => {
+      // Soru metni kontrolü
+      if (!element.label?.trim()) {
+        return true;
+      }
+
+      // Soru tipine göre özel kontroller
+      switch (element.type) {
+        case "multiChoice":
+          // Çoktan seçmeli sorularda seçenekler ve doğru cevap kontrolü
+          return (
+            !element.options?.length ||
+            element.options.some((opt) => !opt?.trim()) ||
+            element.answer === undefined
+          );
+
+        case "boolean":
+          // Doğru/Yanlış sorularında cevap kontrolü
+          return element.answer === undefined;
+
+        case "shortText":
+        case "longText":
+          // Metin sorularında doğru cevap kontrolü
+          return !element.answer?.trim();
+
+        default:
+          return false;
+      }
+    });
+
+    if (invalidQuestions.length < 0) {
+      toast.error(`${invalidQuestions.length} soruda eksik bilgi var!`);
+      return;
+    }
+
     const quizData = {
       title: state.title,
       duration: Number(state.duration),
@@ -63,20 +123,22 @@ const FormCreate = () => {
     };
 
     let result;
-    if (quiz && quiz.id) {
-      // Düzenleme modu - güncelle
-      result = await updateQuiz(quiz.id, quizData);
-    } else {
-      // Yeni quiz oluşturma
-      result = await saveQuiz(quizData);
-    }
+    try {
+      if (quiz && quiz.id) {
+        result = await updateQuiz(quiz.id, quizData);
+      } else {
+        result = await saveQuiz(quizData);
+      }
 
-    if (result.success) {
-      toast.success("Quiz başarıyla kaydedildi!");
-      navigate("/my-quiz");
-    } else {
-      toast.error("Quiz kaydedilemedi!");
-      console.log(result.error);
+      if (result.success) {
+        toast.success("Quiz başarıyla kaydedildi!");
+        navigate("/my-quiz");
+      } else {
+        toast.error("Quiz kaydedilemedi!");
+      }
+    } catch (error) {
+      console.error("Quiz kaydetme hatası:", error);
+      toast.error("Quiz kaydedilirken bir hata oluştu!");
     }
   };
   const renderFormElement = (element) => {
@@ -93,7 +155,9 @@ const FormCreate = () => {
         options={element.options}
         onChange={(value) => handleElementChange(element.id, value)}
         onLabelChange={(label) => handleElementLabelChange(element.id, label)}
-        onAnswerChange={(answer) => handleElementAnswerChange(element.id, answer)} // Bunu ekleyin
+        onAnswerChange={(answer) =>
+          handleElementAnswerChange(element.id, answer)
+        } // Bunu ekleyin
         onOptionsChange={(options) =>
           handleElementOptionsChange(element.id, options)
         }
