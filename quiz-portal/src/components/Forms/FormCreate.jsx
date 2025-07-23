@@ -51,7 +51,7 @@ const FormCreate = () => {
   const handleElementAnswerChange = (id, answer) => {
     dispatch({
       type: "UPDATE_ELEMENT_ANSWER",
-      payload: { id, answer: answer.toString },
+      payload: { id, answer: String(answer) },
     });
   };
 

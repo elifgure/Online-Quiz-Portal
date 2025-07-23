@@ -38,6 +38,8 @@ const OrnekQuiz = () => {
   const [isTimeUp, setIsTimeUp] = useState(false);
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
+  
+  
 
   useEffect(() => {
     if (!activeQuiz || !questions.length) {
@@ -181,18 +183,19 @@ const OrnekQuiz = () => {
   const checkAnswers = () => {
     let totalScore = 0;
     const results = questions.map((question, index) => {
-      const userAnswer = answers[index] || selectedAnswer;
+      const userAnswer = answers[index];
       const teacherAnswer = question.value; // Değişiklik burada
 
-      const isCorrect =
-        userAnswer.toLowerCase() === teacherAnswer.toLowerCase();
+       const isCorrect =
+      (userAnswer ?? "").toString().toLowerCase() ===
+      (teacherAnswer ?? "").toString().toLowerCase();
 
       if (isCorrect) totalScore++;
 
       return {
         questionNumber: index + 1,
         question: question.label,
-        userAnswer: userAnswer || "Cevap verilmedi",
+        userAnswer: userAnswer,
         correctAnswer: teacherAnswer,
         isCorrect: isCorrect,
       };
@@ -216,6 +219,7 @@ const OrnekQuiz = () => {
         details: quizResults.details,
         studentEmail: user.email,
       };
+      
       console.log("Sonuç kaydediliyor:", resultToSave);
       saveStudentResult(resultToSave);
     }
