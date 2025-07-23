@@ -29,13 +29,14 @@ export const AuthProvider = ({ children }) => {
 
           if (teacherSnap.exists()) {
             role = "teacher";
-              console.log("Rol atandı: teacher");
           } else {
             // Öğrenci mi diye kontrol et
             const studentRef = doc(db, "students", firebaseUser.uid);
             const studentSnap = await getDoc(studentRef);
             if (studentSnap.exists()) {
               role = "student";
+              // const studentData = studentSnap.data();
+              // userData.name = studentData.name;
             }
           }
 
@@ -49,10 +50,8 @@ export const AuthProvider = ({ children }) => {
             createdAt: firebaseUser.metadata.creationTime,
             lastLoginAt: firebaseUser.metadata.lastSignInTime,
             providerData: firebaseUser.providerData,
-            role: role, // 🔥 En önemli kısım!
-            
+            role: role, 
           };
-        
 
           setUser(userData);
         } catch (err) {
@@ -74,9 +73,9 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!user,
     isEmailVerified: user?.emailVerified || false,
     userEmail: user?.email,
-    userName: user?.displayName,
+    userName: user?.name || user?.displayName,
     userId: user?.uid,
-     role: user?.role || null, 
+    role: user?.role || null,
   };
 
   return (

@@ -4,7 +4,7 @@ import TeacherDashboard from '../../components/Teacher/TeacherDashboard';
 
 const TeacherPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50/50 via-white to-rose-50/50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-gray-100">
       <Header />
       <div className="p-8">
         <TeacherDashboard />

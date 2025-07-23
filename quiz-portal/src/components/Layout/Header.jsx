@@ -23,7 +23,6 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const result = await logOut();
-      console.log("Logout result:", result);
       if (result.success) {
         toast.success("Başarıyla çıkış yaptınız!", {
           position: "bottom-right",

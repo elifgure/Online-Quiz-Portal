@@ -184,7 +184,8 @@ const OrnekQuiz = () => {
       const userAnswer = answers[index] || selectedAnswer;
       const teacherAnswer = question.value; // Değişiklik burada
 
-      const isCorrect = userAnswer.toLowerCase() === teacherAnswer.toLowerCase();
+      const isCorrect =
+        userAnswer.toLowerCase() === teacherAnswer.toLowerCase();
 
       if (isCorrect) totalScore++;
 
@@ -206,6 +207,7 @@ const OrnekQuiz = () => {
       const quizResults = checkAnswers();
       const resultToSave = {
         studentId: user.uid,
+        studentName: user.displayName,
         quizId: activeQuiz.id || "unknown",
         quizTitle: activeQuiz.title || "Bilinmeyen Quiz",
         category: activeQuiz.category || "Genel",
@@ -222,7 +224,7 @@ const OrnekQuiz = () => {
   // showResults true olduğunda gösterilecek kart
   if (showResults) {
     const quizResults = checkAnswers();
-    
+
     return (
       <Card
         sx={{

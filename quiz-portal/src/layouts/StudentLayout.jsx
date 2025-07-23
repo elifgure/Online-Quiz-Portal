@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { getResultsByStudent } from "../features/Quizzes/resultService";
 
 const StudentLayout = () => {
-  const { user } = useAuth();
+  const { user} = useAuth();
   const [averageScore, setAverageScore] = useState(0);
   const [results, setResults] = useState([]);
 
@@ -65,7 +65,7 @@ const StudentLayout = () => {
         {/* Welcome Section */}
         <div className="mb-8 relative z-10">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-[#044c5c] via-purple-600 to-orange-500 bg-clip-text text-transparent mb-2">
-            Hoş Geldiniz! 👋
+            Hoş Geldiniz! 👋 
           </h2>
           <p className="text-[#2d6c74] text-lg">
             Sınavlarınızı yönetin ve raporlarınızı inceleyin.
