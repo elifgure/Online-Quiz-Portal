@@ -27,7 +27,11 @@ export const saveStudentResult = async (resultData) => {
 export const getResultsByStudent = async (studentId) => {
   try {
     const resultsRef = collection(db, "results");
-    const q = query(resultsRef, where("studentId", "==", studentId));
+    const q = query(
+      resultsRef,
+      where("studentId", "==", studentId),
+      orderBy("createdAt", "desc")
+    );
 
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map((doc) => ({
@@ -74,7 +78,7 @@ export const getRecentActivities = async (userId) => {
 
   try {
     const resultsRef = collection(db, "results");
-    
+
     // createdAt alanı için composite index gerekiyor
     const q = query(
       resultsRef,
@@ -90,23 +94,22 @@ export const getRecentActivities = async (userId) => {
     }
 
     // Firestore timestamp'i düzgün işle
-    const activities = snapshot.docs.map(doc => {
+    const activities = snapshot.docs.map((doc) => {
       const data = doc.data();
       const createdAt = data.createdAt?.toDate?.() || new Date();
       return {
         id: doc.id,
         ...data,
-        createdAt
+        createdAt,
       };
     });
     return activities.sort((a, b) => b.createdAt - a.createdAt); // En yeniden eskiye sırala
-
   } catch (error) {
     console.error("getRecentActivities hatası:", {
       error,
       message: error.message,
       code: error.code,
-      userId
+      userId,
     });
     return [];
   }
