@@ -4,12 +4,73 @@ import { Link } from "react-router-dom";
 
 import Header from "../components/Layout/Header";
 import { useAuth } from "../context/AuthContext";
-import { getResultsByStudent } from "../features/Quizzes/resultService";
+import { getRecentActivities, getResultsByStudent } from "../features/Quizzes/resultService";
 
 const StudentLayout = () => {
-  const { user} = useAuth();
+  const { user } = useAuth();
   const [averageScore, setAverageScore] = useState(0);
   const [results, setResults] = useState([]);
+  const [recentActivities, setRecentActivities] = useState([]);
+
+  // Aktiviteleri formatla
+  const formatTimeAgo = (date) => {
+    if (!date) return "";
+    
+    const seconds = Math.floor((new Date() - date) / 1000);
+    
+    let interval = Math.floor(seconds / 31536000);
+    if (interval > 1) return `${interval} yıl önce`;
+    
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) return `${interval} ay önce`;
+    
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) return `${interval} gün önce`;
+    
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) return `${interval} saat önce`;
+    
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) return `${interval} dakika önce`;
+    
+    return "Az önce";
+  };
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      if (!user?.uid) return;
+
+      try {
+        // Son aktiviteleri getir
+        const activities = await getRecentActivities(user.uid);
+        console.log("Recent Activities:", activities);
+        
+        
+        // Aktiviteleri formatla
+        const formattedActivities = activities.map(activity => ({
+          id: activity.id,
+          activity: `${activity.quizTitle} tamamlandı`,
+          time: formatTimeAgo(activity.createdAt),
+          score: `${Math.round((activity.score / activity.totalQuestions) * 100)}%`,
+          color: getScoreColor(activity.score / activity.totalQuestions),
+          createdAt: activity.createdAt
+        }));
+
+        setRecentActivities(formattedActivities);
+      } catch (error) {
+        console.error("Aktiviteler getirilemedi:", error);
+      }
+    };
+
+    fetchActivities();
+  }, [user]);
+
+  // Renk belirleme fonksiyonu
+  const getScoreColor = (percentage) => {
+    if (percentage >= 0.8) return "purple";
+    if (percentage >= 0.6) return "orange";
+    return "pink";
+  };
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -152,52 +213,39 @@ const StudentLayout = () => {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-purple-200">
             <div className="p-6">
               <div className="space-y-4">
-                {[
-                  {
-                    activity: "Matematik Sınavı tamamlandı",
-                    time: "2 saat önce",
-                    score: "92%",
-                    color: "purple",
-                  },
-                  {
-                    activity: "Fizik Sınavı başlatıldı",
-                    time: "1 gün önce",
-                    score: "88%",
-                    color: "orange",
-                  },
-                  {
-                    activity: "Kimya Raporu görüntülendi",
-                    time: "3 gün önce",
-                    score: "76%",
-                    color: "pink",
-                  },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-4 bg-white/60 backdrop-blur-sm rounded-xl hover:bg-purple-50 transition-colors duration-200 border border-purple-100"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={`w-3 h-3 ${
-                          item.color === "purple"
-                            ? "bg-purple-500"
-                            : item.color === "orange"
-                            ? "bg-orange-500"
-                            : "bg-pink-500"
-                        } rounded-full`}
-                      ></div>
-                      <div>
-                        <p className="font-medium text-[#044c5c]">
-                          {item.activity}
-                        </p>
-                        <p className="text-sm text-[#37747c]">{item.time}</p>
+                {recentActivities.length > 0 ? (
+                  recentActivities.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-4 bg-white/60 backdrop-blur-sm rounded-xl hover:bg-purple-50 transition-colors duration-200 border border-purple-100"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className={`w-3 h-3 ${
+                            item.color === "purple"
+                              ? "bg-purple-500"
+                              : item.color === "orange"
+                              ? "bg-orange-500"
+                              : "bg-pink-500"
+                          } rounded-full`}
+                        ></div>
+                        <div>
+                          <p className="font-medium text-[#044c5c]">
+                            {item.activity}
+                          </p>
+                          <p className="text-sm text-[#37747c]">{item.time}</p>
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {item.score}
                       </div>
                     </div>
-                    <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {item.score}
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-4 text-gray-500">
+                    Henüz aktivite bulunmuyor
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>

@@ -2,6 +2,8 @@ import {
   addDoc,
   collection,
   getDocs,
+  limit,
+  orderBy,
   query,
   serverTimestamp,
   where,
@@ -60,5 +62,28 @@ export const getAllResults = async () => {
   } catch (error) {
     console.error("Sonuçlar getirilemedi:", error);
     throw error;
+  }
+};
+
+// aktiviteler için kullanılan fonksiyon
+export const getRecentActivities = async (studentId) => {
+  try {
+    const ResultsRef = collection(db, "results");
+    const q = query(
+      ResultsRef,
+      where("studentId", "==", studentId),
+      orderBy("createdAt", "desc"),
+      limit(3)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      type: "completed",
+      createdAt: doc.data().createdAt?.toDate(),
+    }));
+  } catch (error) {
+    console.error("Aktiviteler getirilemedi:", error);
+    return [];
   }
 };
