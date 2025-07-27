@@ -31,7 +31,9 @@ export const getResultsByStudent = async (studentId) => {
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate() || new Date(),
+      createdAt:
+        doc.data().createdAt?.toDate()?.toISOString() ||
+        new Date().toISOString(),
     }));
   } catch (error) {
     console.error("Sonuçlar getirilemedi:", error);
@@ -49,7 +51,9 @@ export const getAllResults = async () => {
       results.push({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
+        createdAt:
+          doc.data().createdAt?.toDate()?.toISOString() ||
+          new Date().toISOString(),
       });
     });
     return results;

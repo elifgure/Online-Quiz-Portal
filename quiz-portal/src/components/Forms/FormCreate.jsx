@@ -109,7 +109,7 @@ const FormCreate = () => {
       }
     });
 
-    if (invalidQuestions.length < 0) {
+    if (invalidQuestions.length > 0) {
       toast.error(`${invalidQuestions.length} soruda eksik bilgi var!`);
       return;
     }

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { ChevronDown, Award, Clock, Book, User } from "lucide-react";
 
-const StudentReports = ({ result}) => {
+const StudentReports = ({ result }) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = () => {
@@ -24,8 +24,8 @@ const StudentReports = ({ result}) => {
   };
 
   return (
-    <Accordion 
-      expanded={expanded} 
+    <Accordion
+      expanded={expanded}
       onChange={handleChange}
       sx={{
         mb: 2,
@@ -36,7 +36,6 @@ const StudentReports = ({ result}) => {
         boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
         paddingTop: "8px",
         paddingBottom: "8px",
-
       }}
     >
       <AccordionSummary
@@ -44,24 +43,35 @@ const StudentReports = ({ result}) => {
         sx={{
           borderBottom: expanded ? "1px solid" : "none",
           borderColor: "divider",
-          "&:hover": { bgcolor: "rgba(0,0,0,0.02)" }
+          "&:hover": { bgcolor: "rgba(0,0,0,0.02)" },
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", gap: 2, width: "100%" }}
+        >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
             <Book className="w-5 h-5 text-purple-500" />
-            <Typography variant="h6" sx={{ fontSize: "1rem", color: "#044c5c" }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: "1rem", color: "#044c5c" }}
+            >
               {result.quizTitle}
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.5 }}>
-                  <User className="w-3 h-3 text-gray-500 " />
-                  <Typography variant="caption" color="text.secondary" fontSize={15}>
-                     {result.studentName || "Bilinmiyor"}
-                  </Typography>
-                </Box>
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.5 }}
+            >
+              <User className="w-3 h-3 text-gray-500 " />
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                fontSize={15}
+              >
+                {result.studentName || "Bilinmiyor"}
+              </Typography>
+            </Box>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr:3 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 3 }}>
             <Chip
               icon={<Award className="w-4 h-4" />}
               label={`${result.score}/${result.totalQuestions}`}
@@ -80,7 +90,12 @@ const StudentReports = ({ result}) => {
       </AccordionSummary>
 
       <AccordionDetails sx={{ bgcolor: "rgba(0,0,0,0.01)" }}>
-        <Typography variant="subtitle2" color="text.secondary" fontSize={15} gutterBottom> 
+        <Typography
+          variant="subtitle2"
+          color="text.secondary"
+          fontSize={15}
+          gutterBottom
+        >
           Soru Detayları:
         </Typography>
 
@@ -95,7 +110,7 @@ const StudentReports = ({ result}) => {
                 borderRadius: 1,
                 border: "1px solid",
                 borderColor: detail.isCorrect ? "success.light" : "error.light",
-                position: "relative"
+                position: "relative",
               }}
             >
               <Typography variant="subtitle1" gutterBottom>
@@ -103,8 +118,8 @@ const StudentReports = ({ result}) => {
               </Typography>
 
               <Box sx={{ mt: 1, pl: 2 }}>
-                <Typography 
-                  variant="body2" 
+                <Typography
+                  variant="body2"
                   color={detail.isCorrect ? "success.main" : "error.main"}
                 >
                   <strong>Öğrenci Cevabı:</strong> {detail.userAnswer}
@@ -121,7 +136,7 @@ const StudentReports = ({ result}) => {
                 sx={{
                   position: "absolute",
                   top: 8,
-                  right: 8
+                  right: 8,
                 }}
               />
             </Box>
@@ -130,14 +145,23 @@ const StudentReports = ({ result}) => {
 
         {/* Quiz Detayları */}
         <Box sx={{ mt: 2, p: 2, bgcolor: "background.paper", borderRadius: 1 }}>
-          <Typography variant="subtitle2" color="text.secondary" gutterBottom fontSize={15}>
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            gutterBottom
+            fontSize={15}
+          >
             Quiz Özeti
           </Typography>
           <Typography variant="body2">
-            Toplam Puan: {Math.round((result.score / result.totalQuestions) * 100)}%
+            Toplam Puan:{" "}
+            {Math.round((result.score / result.totalQuestions) * 100)}%
           </Typography>
           <Typography variant="body2">
-            Tamamlanma Tarihi: {new Date(result.createdAt).toLocaleString()}
+            Tamamlanma Tarihi:{" "}
+            {result.createdAt
+              ? new Date(result.createdAt).toLocaleString()
+              : "Tarih bulunamadı"}
           </Typography>
         </Box>
       </AccordionDetails>

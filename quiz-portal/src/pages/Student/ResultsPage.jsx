@@ -86,7 +86,7 @@ const ResultsPage = () => {
                     <span className="text-[#044c5c]">
                       <strong>Tarih:</strong>{" "}
                       {result.createdAt
-                        ? result.createdAt.toLocaleString()
+                        ? new Date(result.createdAt).toLocaleString()
                         : "Tarih bulunamadı"}
                     </span>
                   </div>

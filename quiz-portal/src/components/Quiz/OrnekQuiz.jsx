@@ -38,8 +38,6 @@ const OrnekQuiz = () => {
   const [isTimeUp, setIsTimeUp] = useState(false);
   const navigate = useNavigate();
   const [answers, setAnswers] = useState({});
-  
-  
 
   useEffect(() => {
     if (!activeQuiz || !questions.length) {
@@ -60,6 +58,52 @@ const OrnekQuiz = () => {
     }
   }, [timeRemaining, showResults]);
 
+  // showResults true olduğunda çalışacak useEffect
+  useEffect(() => {
+    if (showResults) {
+      // checkAnswers fonksiyonunu burada tanımlayalım
+      const checkAnswers = () => {
+        let totalScore = 0;
+        const results = questions.map((question, index) => {
+          const userAnswer = answers[String(index)];
+          const teacherAnswer = question.answer; // Doğru cevap question.answer olmalı
+
+          const isCorrect =
+            (userAnswer ?? "").toString().toLowerCase() ===
+            (teacherAnswer ?? "").toString().toLowerCase();
+
+          if (isCorrect) totalScore++;
+
+          return {
+            questionNumber: index + 1,
+            question: question.label,
+            userAnswer: userAnswer,
+            correctAnswer: teacherAnswer,
+            isCorrect: isCorrect,
+          };
+        });
+
+        return { score: totalScore, details: results };
+      };
+
+      const quizResults = checkAnswers();
+      const resultToSave = {
+        studentId: user.uid,
+        studentName: user.displayName,
+        quizId: activeQuiz.id || "unknown",
+        quizTitle: activeQuiz.title || "Bilinmeyen Quiz",
+        category: activeQuiz.category || "Genel",
+        score: quizResults.score,
+        totalQuestions: questions.length,
+        details: quizResults.details,
+        studentEmail: user.email,
+      };
+
+      console.log("Sonuç kaydediliyor:", resultToSave);
+      saveStudentResult(resultToSave);
+    }
+  }, [showResults, answers, questions, user, activeQuiz]); // sadece showResults true olduğunda çalışır
+
   if (!activeQuiz || !questions.length) {
     return (
       <Typography align="center" mt={10} variant="h6">
@@ -73,7 +117,7 @@ const OrnekQuiz = () => {
 
   const handleAnswerSelect = (event) => {
     const value =
-      currentQuestionData.type === "MultiChoice"
+      currentQuestionData.type === "multiChoice"
         ? Number(event.target.value)
         : event.target.value;
     setSelectedAnswer(value);
@@ -84,10 +128,10 @@ const OrnekQuiz = () => {
   };
 
   const handleNextQuestion = () => {
-    // Doğru cevabı kontrol et (eğer correctAnswer varsa)
+    // Doğru cevabı kontrol et (eğer answer varsa)
     if (
-      typeof currentQuestionData.correctAnswer !== "undefined" &&
-      selectedAnswer === currentQuestionData.correctAnswer
+      typeof currentQuestionData.answer !== "undefined" &&
+      selectedAnswer === currentQuestionData.answer
     ) {
       setScore(score + 1);
     }
@@ -134,7 +178,13 @@ const OrnekQuiz = () => {
             variant="outlined"
             label="Cevabınız"
             value={selectedAnswer || ""}
-            onChange={(e) => setSelectedAnswer(e.target.value)}
+            onChange={(e) => {
+              setSelectedAnswer(e.target.value);
+              setAnswers((prev) => ({
+                ...prev,
+                [currentQuestion]: e.target.value,
+              }));
+            }}
             sx={{ my: 2 }}
           />
         );
@@ -147,7 +197,13 @@ const OrnekQuiz = () => {
             multiline
             minRows={3}
             value={selectedAnswer || ""}
-            onChange={(e) => setSelectedAnswer(e.target.value)}
+            onChange={(e) => {
+              setSelectedAnswer(e.target.value);
+              setAnswers((prev) => ({
+                ...prev,
+                [currentQuestion]: e.target.value,
+              }));
+            }}
             sx={{ my: 2 }}
           />
         );
@@ -155,7 +211,13 @@ const OrnekQuiz = () => {
         return (
           <RadioGroup
             value={selectedAnswer}
-            onChange={(e) => setSelectedAnswer(e.target.value)}
+            onChange={(e) => {
+              setSelectedAnswer(e.target.value);
+              setAnswers((prev) => ({
+                ...prev,
+                [currentQuestion]: e.target.value,
+              }));
+            }}
             sx={{ my: 2 }}
           >
             <FormControlLabel value="true" control={<Radio />} label="Doğru" />
@@ -173,7 +235,13 @@ const OrnekQuiz = () => {
             variant="outlined"
             label="Cevabınız"
             value={selectedAnswer || ""}
-            onChange={(e) => setSelectedAnswer(e.target.value)}
+            onChange={(e) => {
+              setSelectedAnswer(e.target.value);
+              setAnswers((prev) => ({
+                ...prev,
+                [currentQuestion]: e.target.value,
+              }));
+            }}
             sx={{ my: 2 }}
           />
         );
@@ -183,12 +251,12 @@ const OrnekQuiz = () => {
   const checkAnswers = () => {
     let totalScore = 0;
     const results = questions.map((question, index) => {
-      const userAnswer = answers[index];
-      const teacherAnswer = question.value; // Değişiklik burada
+      const userAnswer = answers[String(index)];
+      const teacherAnswer = question.answer; // Doğru cevap question.answer olmalı
 
-       const isCorrect =
-      (userAnswer ?? "").toString().toLowerCase() ===
-      (teacherAnswer ?? "").toString().toLowerCase();
+      const isCorrect =
+        (userAnswer ?? "").toString().toLowerCase() ===
+        (teacherAnswer ?? "").toString().toLowerCase();
 
       if (isCorrect) totalScore++;
 
@@ -203,27 +271,6 @@ const OrnekQuiz = () => {
 
     return { score: totalScore, details: results };
   };
-
-  // showResults true olduğunda çalışacak useEffect
-  useEffect(() => {
-    if (showResults) {
-      const quizResults = checkAnswers();
-      const resultToSave = {
-        studentId: user.uid,
-        studentName: user.displayName,
-        quizId: activeQuiz.id || "unknown",
-        quizTitle: activeQuiz.title || "Bilinmeyen Quiz",
-        category: activeQuiz.category || "Genel",
-        score: quizResults.score,
-        totalQuestions: questions.length,
-        details: quizResults.details,
-        studentEmail: user.email,
-      };
-      
-      console.log("Sonuç kaydediliyor:", resultToSave);
-      saveStudentResult(resultToSave);
-    }
-  }, [showResults]); // sadece showResults true olduğunda çalışır
 
   // showResults true olduğunda gösterilecek kart
   if (showResults) {

@@ -90,7 +90,7 @@ export const formReducer = (state, action) => {
     ...state,
     elements: state.elements.map((element) =>
       element.id === action.payload.id
-        ? { ...element, answer: action.payload.value }
+        ? { ...element, answer: action.payload.answer}
         : element
         
     ),
