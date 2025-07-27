@@ -11,28 +11,28 @@ export const initialState = {
 export const formReducer = (state, action) => {
   switch (action.type) {
     case "ADD_ELEMENT":
-  return {
-    ...state,
-    elements: [
-      ...state.elements,
-      action.payload === "multiChoice"
-        ? {
-            id: Date.now(),
-            type: action.payload,
-            value: null,
-            label: "",
-            answer: "", // Bunu ekleyin
-            options: [],
-          }
-        : {
-            id: Date.now(),
-            type: action.payload,
-            value: null,
-            label: "",
-            answer: "", // Bunu ekleyin
-          },
-    ],
-  };
+      return {
+        ...state,
+        elements: [
+          ...state.elements,
+          action.payload === "multiChoice"
+            ? {
+                id: Date.now(),
+                type: action.payload,
+                value: null,
+                label: "",
+                answer: "", // Bunu ekleyin
+                options: [],
+              }
+            : {
+                id: Date.now(),
+                type: action.payload,
+                value: null,
+                label: "",
+                answer: "", // Bunu ekleyin
+              },
+        ],
+      };
     case "DELETE_ELEMENT":
       return {
         ...state,
@@ -75,26 +75,24 @@ export const formReducer = (state, action) => {
         ...state,
         duration: action.payload,
       };
-      case "SET_INITIAL_STATE":
-        return{
-        
-          title:action.payload.title,
-          duration:action.payload.duration,
-          category:action.payload.category,
-          elements:action.payload.elements || [],
-        }
+    case "SET_INITIAL_STATE":
+      return {
+        title: action.payload.title,
+        duration: action.payload.duration,
+        category: action.payload.category,
+        elements: action.payload.elements || [],
+      };
     case "UPDATE_CATEGORY":
       return { ...state, category: action.payload };
     case "UPDATE_ELEMENT_ANSWER":
-  return {
-    ...state,
-    elements: state.elements.map((element) =>
-      element.id === action.payload.id
-        ? { ...element, answer: action.payload.answer}
-        : element
-        
-    ),
-  };
+      return {
+        ...state,
+        elements: state.elements.map((element) =>
+          element.id === action.payload.id
+            ? { ...element, answer: action.payload.answer }
+            : element
+        ),
+      };
     default:
       return state;
   }

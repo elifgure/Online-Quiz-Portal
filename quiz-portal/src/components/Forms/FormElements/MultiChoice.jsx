@@ -42,8 +42,8 @@ const MultiChoice = ({
           <input
             type="radio"
             name={`question-${label}`}
-            value={alphabet[idx]}
-            checked={answer === alphabet[idx]}
+            value={idx} // alphabet[idx] yerine direkt idx kullan
+            checked={Number(answer) === idx} // Kontrol için Number kullan
             onChange={(e) => onAnswerChange(e.target.value)}
             className="mr-2"
           />

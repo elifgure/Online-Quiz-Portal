@@ -21,6 +21,7 @@ import { saveStudentResult } from "../../features/Quizzes/resultService";
 const OrnekQuiz = () => {
   const activeQuiz = useSelector((state) => state.activeQuiz);
   const { user } = useAuth();
+  const alphabet = 'ABCDE'.split('');
 
   // her renderda gereksiz tetiklememesi için.
   const questions = useMemo(
@@ -66,20 +67,49 @@ const OrnekQuiz = () => {
         let totalScore = 0;
         const results = questions.map((question, index) => {
           const userAnswer = answers[String(index)];
-          const teacherAnswer = question.answer; // Doğru cevap question.answer olmalı
+          const teacherAnswer = question.answer;
 
-          const isCorrect =
-            (userAnswer ?? "").toString().toLowerCase() ===
-            (teacherAnswer ?? "").toString().toLowerCase();
+          let isCorrect = false;
+          let formattedUserAnswer = "Cevap verilmedi";
+          let formattedTeacherAnswer = teacherAnswer;
+
+          switch (question.type) {
+            case "multiChoice":
+              // Çoktan seçmeli sorular için harf şıkkına çevir
+              formattedUserAnswer =
+                userAnswer !== undefined
+                  ? alphabet[userAnswer]
+                  : "Cevap verilmedi";
+              formattedTeacherAnswer = alphabet[teacherAnswer];
+              isCorrect = Number(userAnswer) === Number(teacherAnswer);
+              break;
+
+            case "boolean":
+              // Boolean sorular için Doğru/Yanlış formatı
+              formattedUserAnswer = userAnswer === "true" ? "Doğru" : "Yanlış";
+              formattedTeacherAnswer = teacherAnswer === "true" ? "Doğru" : "Yanlış";
+              isCorrect = userAnswer === teacherAnswer;
+              break;
+
+            case "shortText":
+            case "longText":
+              // Metin soruları için direkt karşılaştırma
+              formattedUserAnswer = userAnswer || "Cevap verilmedi";
+              isCorrect =
+                (userAnswer || "").toLowerCase().trim() ===
+                (teacherAnswer || "").toLowerCase().trim();
+              break;
+          }
 
           if (isCorrect) totalScore++;
 
           return {
             questionNumber: index + 1,
             question: question.label,
-            userAnswer: userAnswer,
-            correctAnswer: teacherAnswer,
-            isCorrect: isCorrect,
+            type: question.type, // Soru tipini de ekleyelim
+            userAnswer: formattedUserAnswer,
+            correctAnswer: formattedTeacherAnswer,
+            isCorrect,
           };
         });
 
@@ -150,7 +180,7 @@ const OrnekQuiz = () => {
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  const optionLetters = ["A", "B", "C", "D", "E", "F", "G"];
+  
   const renderAnswerInput = () => {
     switch (currentQuestionData.type) {
       case "multiChoice":
@@ -164,7 +194,7 @@ const OrnekQuiz = () => {
               <FormControlLabel
                 key={index}
                 value={index}
-                label={`${optionLetters[index] || ""} ${option}`}
+                label={`${alphabet[index] || ""} ${option}`}
                 control={<Radio />}
                 sx={{ mb: 1 }}
               />
@@ -252,20 +282,49 @@ const OrnekQuiz = () => {
     let totalScore = 0;
     const results = questions.map((question, index) => {
       const userAnswer = answers[String(index)];
-      const teacherAnswer = question.answer; // Doğru cevap question.answer olmalı
+      const teacherAnswer = question.answer;
 
-      const isCorrect =
-        (userAnswer ?? "").toString().toLowerCase() ===
-        (teacherAnswer ?? "").toString().toLowerCase();
+      let isCorrect = false;
+      let formattedUserAnswer = "Cevap verilmedi";
+      let formattedTeacherAnswer = teacherAnswer;
+
+      switch (question.type) {
+        case "multiChoice":
+          // Çoktan seçmeli sorular için harf şıkkına çevir
+          formattedUserAnswer =
+            userAnswer !== undefined
+              ? alphabet[userAnswer]
+              : "Cevap verilmedi";
+          formattedTeacherAnswer = alphabet[teacherAnswer];
+          isCorrect = Number(userAnswer) === Number(teacherAnswer);
+          break;
+
+        case "boolean":
+          // Boolean sorular için Doğru/Yanlış formatı
+          formattedUserAnswer = userAnswer === "true" ? "Doğru" : "Yanlış";
+          formattedTeacherAnswer = teacherAnswer === "true" ? "Doğru" : "Yanlış";
+          isCorrect = userAnswer === teacherAnswer;
+          break;
+
+        case "shortText":
+        case "longText":
+          // Metin soruları için direkt karşılaştırma
+          formattedUserAnswer = userAnswer || "Cevap verilmedi";
+          isCorrect =
+            (userAnswer || "").toLowerCase().trim() ===
+            (teacherAnswer || "").toLowerCase().trim();
+          break;
+      }
 
       if (isCorrect) totalScore++;
 
       return {
         questionNumber: index + 1,
         question: question.label,
-        userAnswer: userAnswer,
-        correctAnswer: teacherAnswer,
-        isCorrect: isCorrect,
+        type: question.type, // Soru tipini de ekleyelim
+        userAnswer: formattedUserAnswer,
+        correctAnswer: formattedTeacherAnswer,
+        isCorrect,
       };
     });
 

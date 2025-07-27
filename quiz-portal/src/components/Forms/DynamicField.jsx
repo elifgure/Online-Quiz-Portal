@@ -11,7 +11,12 @@ const FIELD_COMPONENTS = {
 };
 
 // Kendi etiketini yöneten bileşen türlerini burada listeliyoruz
-const typesWithInternalLabels = ["shortText", "longText", "boolean", "multiChoice"];
+const typesWithInternalLabels = [
+  "shortText",
+  "longText",
+  "boolean",
+  "multiChoice",
+];
 
 const DynamicField = ({
   id,
@@ -25,6 +30,8 @@ const DynamicField = ({
   onDelete,
   onLabelChange,
   onOptionsChange,
+  onAnswerChange,
+  answer,
 }) => {
   const renderInput = () => {
     switch (type) {
@@ -70,18 +77,14 @@ const DynamicField = ({
           </div>
         );
       case "category":
-        return (
-          <CategoryField
-            onChange={onChange}
-          />
-        );
+        return <CategoryField onChange={onChange} />;
       case "shortText":
         return (
           <ShortText
             label={label}
-            answer={value} // value'yu answer olarak geçiyoruz
+            answer={answer} // answer prop'unu kullan
             onLabelChange={onLabelChange}
-            onAnswerChange={onChange} // onChange'i onAnswerChange olarak geçiyoruz
+            onAnswerChange={onAnswerChange} // onAnswerChange prop'unu kullan
             isPreview={false}
           />
         );
@@ -89,9 +92,9 @@ const DynamicField = ({
         return (
           <LongText
             label={label}
-            answer={value}
+            answer={answer}
             onLabelChange={onLabelChange}
-            onAnswerChange={onChange}
+            onAnswerChange={onAnswerChange}
             isPreview={false}
           />
         );
@@ -99,11 +102,11 @@ const DynamicField = ({
         return (
           <MultiChoice
             label={label}
-            answer={value}
+            answer={answer}
             onLabelChange={onLabelChange}
             options={options || [""]}
             onOptionsChange={onOptionsChange}
-            onAnswerChange={onChange}
+            onAnswerChange={onAnswerChange}
             isPreview={false}
           />
         );
@@ -112,9 +115,9 @@ const DynamicField = ({
           <BooleanField
             id={id}
             label={label}
-            value={value}
+            value={answer}
             onLabelChange={onLabelChange}
-            onChange={onChange}
+            onChange={onAnswerChange}
             isPreview={false}
           />
         );
