@@ -20,7 +20,7 @@ const ReportsPage = () => {
   } = useSelector((state) => state.results);
 
   useEffect(() => {
-    console.log("results:", results);
+    
   }, [results]);
 
   useEffect(() => {
@@ -198,7 +198,7 @@ const ReportsPage = () => {
                 </div>
               </div>
               
-              <div style={{
+              {/* <div style={{
                 background: 'rgba(255,255,255,0.2)',
                 padding: '1.5rem 2rem',
                 borderRadius: '16px',
@@ -212,7 +212,7 @@ const ReportsPage = () => {
                 <div style={{ fontSize: '0.9rem', opacity: '0.9' }}>
                   Başarılı
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

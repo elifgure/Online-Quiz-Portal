@@ -11,6 +11,7 @@ const StudentLayout = () => {
   const [averageScore, setAverageScore] = useState(0);
   const [results, setResults] = useState([]);
   const [recentActivities, setRecentActivities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Aktiviteleri formatla
   const formatTimeAgo = (date) => {
@@ -19,11 +20,6 @@ const StudentLayout = () => {
     const seconds = Math.floor((new Date() - date) / 1000);
     
     let interval = Math.floor(seconds / 31536000);
-    if (interval > 1) return `${interval} yıl önce`;
-    
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) return `${interval} ay önce`;
-    
     interval = Math.floor(seconds / 86400);
     if (interval > 1) return `${interval} gün önce`;
     
@@ -36,68 +32,82 @@ const StudentLayout = () => {
     return "Az önce";
   };
 
+  // Tüm fetch işlemlerini tek bir useEffect'te toplayalım
   useEffect(() => {
-    const fetchActivities = async () => {
-      if (!user?.uid) return;
+    const fetchData = async () => {
+      if (!user?.uid) {
+        setIsLoading(false);
+        return;
+      }
 
       try {
-        // Son aktiviteleri getir
-        const activities = await getRecentActivities(user.uid);
-        console.log("Recent Activities:", activities);
-        
-        
-        // Aktiviteleri formatla
-        const formattedActivities = activities.map(activity => ({
-          id: activity.id,
-          activity: `${activity.quizTitle} tamamlandı`,
-          time: formatTimeAgo(activity.createdAt),
-          score: `${Math.round((activity.score / activity.totalQuestions) * 100)}%`,
-          color: getScoreColor(activity.score / activity.totalQuestions),
-          createdAt: activity.createdAt
-        }));
+        setIsLoading(true);
 
-        setRecentActivities(formattedActivities);
+        // Sonuçları ve aktiviteleri paralel olarak çekelim
+        const [studentResults, activities] = await Promise.all([
+          getResultsByStudent(user.uid),
+          getRecentActivities(user.uid)
+        ]);
+
+
+
+        // Sonuçları işle
+        if (studentResults.length > 0) {
+          const totalScore = studentResults.reduce((acc, result) => {
+            const percentage = (result.score / result.totalQuestions) * 100;
+            return acc + percentage;
+          }, 0);
+          setAverageScore(Math.round(totalScore / studentResults.length));
+        }
+        setResults(studentResults);
+
+        // Aktiviteleri formatla ve state'e kaydet
+        if (activities?.length > 0) {
+          const formattedActivities = activities.map(activity => ({
+            id: activity.id,
+            activity: `${activity.quizTitle}  Sınavı Tamamlandı`,
+            time: formatTimeAgo(activity.createdAt),
+            score: `${Math.round((activity.score / activity.totalQuestions) * 100)}%`,
+            color: getScoreColor(activity.score / activity.totalQuestions),
+            createdAt: activity.createdAt
+          }));
+          setRecentActivities(formattedActivities);
+        }
+
       } catch (error) {
-        console.error("Aktiviteler getirilemedi:", error);
+        console.error("Veri çekme hatası:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchActivities();
-  }, [user]);
+    fetchData();
+    
+// cleanup function
+    return () => {
+      setResults([]);
+      setRecentActivities([]);
+      setAverageScore(0);
+    };
+  }, [user?.uid]); 
 
-  // Renk belirleme fonksiyonu
+  
   const getScoreColor = (percentage) => {
     if (percentage >= 0.8) return "purple";
     if (percentage >= 0.6) return "orange";
     return "pink";
   };
 
-  useEffect(() => {
-    const fetchResults = async () => {
-      if (!user?.uid) return;
-
-      try {
-        const studentResults = await getResultsByStudent(user.uid);
-        setResults(studentResults);
-
-        // Ortalama hesaplama
-        if (studentResults.length > 0) {
-          const totalScore = studentResults.reduce((acc, result) => {
-            // Her quizin yüzdelik başarısını hesapla
-            const percentage = (result.score / result.totalQuestions) * 100;
-            return acc + percentage;
-          }, 0);
-
-          const average = Math.round(totalScore / studentResults.length);
-          setAverageScore(average);
-        }
-      } catch (error) {
-        console.error("Sonuçlar getirilemedi:", error);
-      }
-    };
-
-    fetchResults();
-  }, [user]);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-100 via-white to-orange-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#044c5c] text-lg font-medium">Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   const menuItems = [
     {

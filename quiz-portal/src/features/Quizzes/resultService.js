@@ -66,24 +66,48 @@ export const getAllResults = async () => {
 };
 
 // aktiviteler için kullanılan fonksiyon
-export const getRecentActivities = async (studentId) => {
+export const getRecentActivities = async (userId) => {
+  if (!userId) {
+    console.warn("getRecentActivities: userId boş!");
+    return [];
+  }
+
   try {
-    const ResultsRef = collection(db, "results");
+    const resultsRef = collection(db, "results");
+    
+    // createdAt alanı için composite index gerekiyor
     const q = query(
-      ResultsRef,
-      where("studentId", "==", studentId),
+      resultsRef,
+      where("studentId", "==", userId),
       orderBy("createdAt", "desc"),
       limit(3)
     );
+
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      type: "completed",
-      createdAt: doc.data().createdAt?.toDate(),
-    }));
+
+    if (!snapshot || snapshot.empty) {
+      return [];
+    }
+
+    // Firestore timestamp'i düzgün işle
+    const activities = snapshot.docs.map(doc => {
+      const data = doc.data();
+      const createdAt = data.createdAt?.toDate?.() || new Date();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt
+      };
+    });
+    return activities.sort((a, b) => b.createdAt - a.createdAt); // En yeniden eskiye sırala
+
   } catch (error) {
-    console.error("Aktiviteler getirilemedi:", error);
+    console.error("getRecentActivities hatası:", {
+      error,
+      message: error.message,
+      code: error.code,
+      userId
+    });
     return [];
   }
 };

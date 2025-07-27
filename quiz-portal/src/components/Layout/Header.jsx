@@ -133,7 +133,7 @@ const Header = () => {
                         </Link>
                         
                         <Link
-                          to="/reports"
+                          to={user?.role === "teacher" ? "/reports" : "/results"}
                           onClick={handleMenuItemClick}
                           className="flex items-center space-x-3 px-4 py-2 text-sm text-[#044c5c] hover:bg-purple-50 transition-colors duration-200"
                         >
@@ -142,12 +142,12 @@ const Header = () => {
                         </Link>
                         
                         <Link
-                          to="/my-exams"
+                          to={user?.role === "teacher" ? "/my-quiz" : "/student-quizzes"}
                           onClick={handleMenuItemClick}
                           className="flex items-center space-x-3 px-4 py-2 text-sm text-[#044c5c] hover:bg-purple-50 transition-colors duration-200"
                         >
                           <FileText className="h-4 w-4" />
-                          <span>Sınavlarım</span>
+                          <span>Quizlerim</span>
                         </Link>
                         
                         <Link
