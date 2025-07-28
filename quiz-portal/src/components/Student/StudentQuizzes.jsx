@@ -6,18 +6,29 @@ import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setActiveQuiz } from "../../redux/slices/activeQuizSlice";
 import Header from "../Layout/Header";
+import { useAuth } from "../../context/AuthContext";
+import { getSolvedOuizzesByStudent } from "../../features/Quizzes/resultService";
 
 const StudentQuizzes = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const quizzesData = await getAllQuizzes();
-        setQuizzes(quizzesData);
+        if (!user) return;
+
+        const solvedQuizId = await getSolvedOuizzesByStudent(user.uid);
+        const allQuizzes = await getAllQuizzes();
+
+        const unSolvedQuizzes = allQuizzes.filter(
+          (quiz) => !solvedQuizId.includes(quiz.id)
+        );
+
+        setQuizzes(unSolvedQuizzes);
       } catch (error) {
         console.error("Quizler yüklenirken hata:", error);
       } finally {

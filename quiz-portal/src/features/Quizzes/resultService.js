@@ -114,3 +114,13 @@ export const getRecentActivities = async (userId) => {
     return [];
   }
 };
+// çözülmüş quizlerin idlerini çekmek için kullanılan fonksiyon
+export const getSolvedOuizzesByStudent = async (studentId) => {
+  const q = query(
+    collection(db, "results"),
+    where("studentId", "==", studentId)
+  );
+  const snapshot = await getDocs(q);
+  const quizIds = snapshot.docs.map((doc) => doc.data().quizId);
+  return quizIds;
+};
