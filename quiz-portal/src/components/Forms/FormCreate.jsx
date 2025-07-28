@@ -334,7 +334,6 @@ const FormCreate = () => {
                 <div className="mt-4 space-y-3">
                   {fieldTypes.map((fieldType) => {
                     const IconComponent = fieldType.icon;
-
                     return (
                       <button
                         key={fieldType.type}
@@ -394,5 +393,4 @@ const FormCreate = () => {
     </div>
   );
 };
-
 export default FormCreate;

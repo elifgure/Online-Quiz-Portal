@@ -29,7 +29,7 @@ export const formReducer = (state, action) => {
                 type: action.payload,
                 value: null,
                 label: "",
-                answer: "", // Bunu ekleyin
+                answer: "", 
               },
         ],
       };

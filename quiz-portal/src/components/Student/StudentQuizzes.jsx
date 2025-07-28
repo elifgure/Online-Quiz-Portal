@@ -1,22 +1,18 @@
 import { BookOpen, Clock, Play, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { auth } from "../../lib/fireBase";
-import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllQuizzes } from "../../features/Quizzes/quizService";
 import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setActiveQuiz } from "../../redux/slices/activeQuizSlice";
+import Header from "../Layout/Header";
 
 const StudentQuizzes = () => {
-  const { user, isAuthenticated } = useAuth();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
- 
-  
+
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
@@ -32,53 +28,14 @@ const StudentQuizzes = () => {
     fetchQuizzes();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Çıkış yapılırken hata oluştu:", error);
-    }
-  };
-  
-  const Header = () => (
-    <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-purple-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-[#044c5c] to-purple-600 bg-clip-text text-transparent">
-              Öğrenci Paneli
-            </h1>
-          </div>
-          {isAuthenticated && user ? (
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-purple-100 rounded-full px-4 py-2">
-                <span className="text-[#044c5c] font-medium">
-                  {user?.displayName || user?.email || "Kullanıcı"}
-                </span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors duration-200"
-                title="Çıkış Yap"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Çıkış</span>
-              </button>
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </header>
-  );
-
   const getCategoryColor = (index) => {
     const colors = [
-      'from-purple-500 to-pink-500',
-      'from-orange-500 to-red-500',
-      'from-blue-500 to-cyan-500',
-      'from-green-500 to-emerald-500',
-      'from-indigo-500 to-purple-500',
-      'from-pink-500 to-rose-500'
+      "from-purple-500 to-pink-500",
+      "from-orange-500 to-red-500",
+      "from-blue-500 to-cyan-500",
+      "from-green-500 to-emerald-500",
+      "from-indigo-500 to-purple-500",
+      "from-pink-500 to-rose-500",
     ];
     return colors[index % colors.length];
   };
@@ -121,7 +78,8 @@ const StudentQuizzes = () => {
             Mevcut Sınavlar 📚
           </h2>
           <p className="text-[#2d6c74] text-lg">
-            Öğretmeniniz tarafından hazırlanan sınavları görüntüleyin ve başlatın.
+            Öğretmeniniz tarafından hazırlanan sınavları görüntüleyin ve
+            başlatın.
           </p>
         </div>
 
@@ -133,7 +91,6 @@ const StudentQuizzes = () => {
             </div>
           ) : (
             quizzes.map((quiz, index) => (
-          
               <div
                 key={quiz.id}
                 className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group border border-purple-200 hover:border-purple-400 hover:-translate-y-2"
@@ -141,11 +98,19 @@ const StudentQuizzes = () => {
                 <div className="p-6">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`bg-gradient-to-r ${getCategoryColor(index)} p-3 rounded-xl group-hover:scale-110 transition-transform duration-300`}>
+                    <div
+                      className={`bg-gradient-to-r ${getCategoryColor(
+                        index
+                      )} p-3 rounded-xl group-hover:scale-110 transition-transform duration-300`}
+                    >
                       <BookOpen className="h-6 w-6 text-white" />
                     </div>
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className={`w-2 h-2 ${index % 2 === 0 ? 'bg-purple-500' : 'bg-orange-500'} rounded-full`}></div>
+                      <div
+                        className={`w-2 h-2 ${
+                          index % 2 === 0 ? "bg-purple-500" : "bg-orange-500"
+                        } rounded-full`}
+                      ></div>
                     </div>
                   </div>
 
@@ -162,17 +127,23 @@ const StudentQuizzes = () => {
                     <div className="flex items-center justify-between p-3 bg-white/60 backdrop-blur-sm rounded-xl border border-purple-100">
                       <div className="flex items-center space-x-2">
                         <BookOpen className="h-4 w-4 text-purple-500" />
-                        <span className="text-[#37747c] text-sm">Kategori:</span>
+                        <span className="text-[#37747c] text-sm">
+                          Kategori:
+                        </span>
                       </div>
-                      <span className="font-medium text-[#044c5c]">{quiz.category || "Genel"}</span>
+                      <span className="font-medium text-[#044c5c]">
+                        {quiz.category || "Genel"}
+                      </span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between p-3 bg-white/60 backdrop-blur-sm rounded-xl border border-purple-100">
                       <div className="flex items-center space-x-2">
                         <Clock className="h-4 w-4 text-orange-500" />
                         <span className="text-[#37747c] text-sm">Süre:</span>
                       </div>
-                      <span className="font-medium text-[#044c5c]">{quiz.duration} dk</span>
+                      <span className="font-medium text-[#044c5c]">
+                        {quiz.duration} dk
+                      </span>
                     </div>
                   </div>
 
@@ -185,9 +156,13 @@ const StudentQuizzes = () => {
                     <span>Quizi Başlat</span>
                   </button>
                 </div>
-                
+
                 {/* Bottom accent */}
-                <div className={`h-1 bg-gradient-to-r ${getCategoryColor(index)} rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
+                <div
+                  className={`h-1 bg-gradient-to-r ${getCategoryColor(
+                    index
+                  )} rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}
+                ></div>
               </div>
             ))
           )}
