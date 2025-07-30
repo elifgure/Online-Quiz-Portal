@@ -37,7 +37,7 @@ const StudentQuizzes = () => {
     };
 
     fetchQuizzes();
-  }, []);
+  }, [user]);
 
   const getCategoryColor = (index) => {
     const colors = [

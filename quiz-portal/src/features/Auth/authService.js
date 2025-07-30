@@ -34,7 +34,7 @@ export const registerUser = async (userName, password, email, role) => {
     if (role === "teacher") {
       await setDoc(doc(db, "teachers", user.uid), {
         ...userData,
-        collectionList: [],
+         collectionList: [],
       });
     } else if (role === "student") {
       await setDoc(doc(db, "students", user.uid), {
@@ -45,13 +45,17 @@ export const registerUser = async (userName, password, email, role) => {
         createdAt: new Date().toISOString(),
         cardTemplates: [],
       });
-    }
+    }else if(role === "admin") {
+      await setDoc(doc(db, "admins", user.uid), {
+        ...userData,
+
+      })
 
     return {
       success: true,
       message: "Kayıt başarılı! Lütfen e-posta adresinizi doğrulayın.",
     };
-  } catch (error) {
+  }} catch (error) {
     throw new Error("hata oluştu: " + error.message);
   }
 };
@@ -67,6 +71,8 @@ export const loginUser = async (email, password, role) => {
       userSnapshot = await getDoc(doc(db, "teachers", userCredential.user.uid));
     } else if (role === "student") {
       userSnapshot = await getDoc(doc(db, "students", userCredential.user.uid));
+    }else if(role === "admin"){
+      userSnapshot = await getDoc(doc, (db, "admins", userCredential.uid))
     }
     if (!userSnapshot.exists()) {
       throw new Error("Kullanıcı Bulunamadı");

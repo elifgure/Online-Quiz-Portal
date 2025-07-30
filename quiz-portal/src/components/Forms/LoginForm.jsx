@@ -11,8 +11,9 @@ import {
   UserCheck,
   GraduationCap,
   LogIn,
+  Shield,
 } from "lucide-react";
-import {Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../features/Auth/authService";
 import logo from "../../assets/logo-transparent.png";
 
@@ -41,6 +42,8 @@ const LoginForm = () => {
         navigate("/student");
       } else if (result && role === "teacher") {
         navigate("/teacher");
+      } else if (result && role === "admin") {
+        navigate("/admin");
       }
       reset();
     } catch (err) {
@@ -99,94 +102,135 @@ const LoginForm = () => {
                 type="button"
                 onClick={() => setRole("student")}
                 className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all duration-300 shadow-sm flex items-center justify-center gap-2 ${
-                  role === "student" 
-                    ? "bg-gradient-to-r from-[#33a393] to-[#21817c] text-white shadow-lg transform scale-[1.02]" 
+                  role === "student"
+                    ? "bg-gradient-to-r from-[#33a393] to-[#21817c] text-white shadow-lg transform scale-[1.02]"
                     : "text-[#2d6c74] hover:bg-white/80 hover:shadow-md"
                 }`}
               >
                 <GraduationCap className="w-5 h-5" />
                 Öğrenci
               </button>
-              
+
               {/* Öğretmen Rolü Butonu */}
               <button
                 type="button"
                 onClick={() => setRole("teacher")}
                 className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all duration-300 shadow-sm flex items-center justify-center gap-2 ${
-                  role === "teacher" 
-                    ? "bg-gradient-to-r from-[#33a393] to-[#21817c] text-white shadow-lg transform scale-[1.02]" 
+                  role === "teacher"
+                    ? "bg-gradient-to-r from-[#33a393] to-[#21817c] text-white shadow-lg transform scale-[1.02]"
                     : "text-[#2d6c74] hover:bg-white/80 hover:shadow-md"
                 }`}
               >
                 <UserCheck className="w-5 h-5" />
                 Öğretmen
               </button>
+               {/* Admin Rolü Butonu */}
+              <button
+                type="button"
+                onClick={() => setRole("admin")}
+                className={`flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-all duration-300 shadow-sm flex items-center justify-center gap-2 ${
+                  role === "admin"
+                    ? "bg-gradient-to-r from-[#33a393] to-[#21817c] text-white shadow-lg transform scale-[1.02]"
+                    : "text-[#2d6c74] hover:bg-white/80 hover:shadow-md"
+                }`}
+              >
+                <Shield className="w-5 h-5" />
+                Admin
+              </button>
             </div>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-  {/* Email Field */}
-<div className="pt-2">
-  <fieldset className={`relative border-2 rounded-xl ${errors.email ? "border-red-400" : "border-[#33a393]"} focus-within:border-[#21817c] transition-all duration-200`}>
-    <legend className={`text-sm px-4 font-medium ${errors.email ? "text-red-500" : "text-[#33a393]"}`}>
-      E-posta
-    </legend>
-    <div className="flex items-center px-3 py-2">
-      <Mail className={`h-5 w-5 ${errors.email ? "text-red-500" : "text-[#33a393]"} mr-2`} />
-      <input
-        type="email"
-        name="email"
-        placeholder="E-posta adresinizi giriniz"
-        className="w-full h-10 bg-transparent outline-none text-gray-800 placeholder-gray-400"
-        {...register("email")}
-      />
-    </div>
-  </fieldset>
-  {errors.email && (
-    <p className="text-sm text-red-500 font-medium mt-1">
-      {errors.email.message}
-    </p>
-  )}
-</div>
+            {/* Email Field */}
+            <div className="pt-2">
+              <fieldset
+                className={`relative border-2 rounded-xl ${
+                  errors.email ? "border-red-400" : "border-[#33a393]"
+                } focus-within:border-[#21817c] transition-all duration-200`}
+              >
+                <legend
+                  className={`text-sm px-4 font-medium ${
+                    errors.email ? "text-red-500" : "text-[#33a393]"
+                  }`}
+                >
+                  E-posta
+                </legend>
+                <div className="flex items-center px-3 py-2">
+                  <Mail
+                    className={`h-5 w-5 ${
+                      errors.email ? "text-red-500" : "text-[#33a393]"
+                    } mr-2`}
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="E-posta adresinizi giriniz"
+                    className="w-full h-10 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+                    {...register("email")}
+                  />
+                </div>
+              </fieldset>
+              {errors.email && (
+                <p className="text-sm text-red-500 font-medium mt-1">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
 
-{/* Password Field */}
-<div className="pt-2">
-  <fieldset className={`relative border-2 rounded-xl ${errors.password ? "border-red-400" : "border-[#33a393]"} focus-within:border-[#21817c] transition-all duration-200`}>
-    <legend className={`text-sm px-4 font-medium ${errors.password ? "text-red-500" : "text-[#33a393]"}`}>
-      Şifre
-    </legend>
-    <div className="flex items-center px-3 py-2">
-      <Lock className={`h-5 w-5 ${errors.password ? "text-red-500" : "text-[#33a393]"} mr-2`} />
-      <input
-        type={showPassword ? "text" : "password"}
-        name="password"
-        placeholder="Şifrenizi giriniz"
-        className="w-full h-10 bg-transparent outline-none text-gray-800 placeholder-gray-400"
-        {...register("password")}
-      />
-      <button
-        type="button"
-        onClick={() => setShowPassword(!showPassword)}
-        className="text-[#33a393] hover:text-[#21817c] ml-2"
-      >
-        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-      </button>
-    </div>
-  </fieldset>
-  {errors.password && (
-    <p className="text-sm text-red-500 font-medium mt-1">
-      {errors.password.message}
-    </p>
-  )}
-</div>
- {/* Login Button */}
+            {/* Password Field */}
+            <div className="pt-2">
+              <fieldset
+                className={`relative border-2 rounded-xl ${
+                  errors.password ? "border-red-400" : "border-[#33a393]"
+                } focus-within:border-[#21817c] transition-all duration-200`}
+              >
+                <legend
+                  className={`text-sm px-4 font-medium ${
+                    errors.password ? "text-red-500" : "text-[#33a393]"
+                  }`}
+                >
+                  Şifre
+                </legend>
+                <div className="flex items-center px-3 py-2">
+                  <Lock
+                    className={`h-5 w-5 ${
+                      errors.password ? "text-red-500" : "text-[#33a393]"
+                    } mr-2`}
+                  />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Şifrenizi giriniz"
+                    className="w-full h-10 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+                    {...register("password")}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-[#33a393] hover:text-[#21817c] ml-2"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+              </fieldset>
+              {errors.password && (
+                <p className="text-sm text-red-500 font-medium mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            {/* Login Button */}
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
               className={`w-full py-4 px-6 rounded-xl font-semibold text-white text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3 ${
-                isSubmitting 
-                  ? "bg-gray-400 cursor-not-allowed" 
+                isSubmitting
+                  ? "bg-gray-400 cursor-not-allowed"
                   : "bg-gradient-to-r from-[#33a393] to-[#21817c] hover:from-[#21817c] hover:to-[#156b6c] hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               }`}
             >
@@ -202,10 +246,7 @@ const LoginForm = () => {
                 </>
               )}
             </button>
-
-
-</form>
-
+          </form>
 
           {/* Footer Links */}
           <div className="mt-8 text-center space-y-3">

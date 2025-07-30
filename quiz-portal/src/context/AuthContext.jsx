@@ -23,20 +23,26 @@ export const AuthProvider = ({ children }) => {
         try {
           let role = null;
 
-          // Önce öğretmen mi diye kontrol et
-          const teacherRef = doc(db, "teachers", firebaseUser.uid);
-          const teacherSnap = await getDoc(teacherRef);
+          // Önce admin mi diye kontrol et
+          const adminRef = doc(db, "admins", firebaseUser.uid);
+          const adminSnap = await getDoc(adminRef);
 
-          if (teacherSnap.exists()) {
-            role = "teacher";
+          if (adminSnap.exists()) {
+            role = "admin";
           } else {
-            // Öğrenci mi diye kontrol et
-            const studentRef = doc(db, "students", firebaseUser.uid);
-            const studentSnap = await getDoc(studentRef);
-            if (studentSnap.exists()) {
-              role = "student";
-              // const studentData = studentSnap.data();
-              // userData.name = studentData.name;
+            // Admin değilse öğretmen mi diye kontrol et
+            const teacherRef = doc(db, "teachers", firebaseUser.uid);
+            const teacherSnap = await getDoc(teacherRef);
+
+            if (teacherSnap.exists()) {
+              role = "teacher";
+            } else {
+              // Öğrenci mi diye kontrol et
+              const studentRef = doc(db, "students", firebaseUser.uid);
+              const studentSnap = await getDoc(studentRef);
+              if (studentSnap.exists()) {
+                role = "student"
+              }
             }
           }
 
@@ -52,6 +58,13 @@ export const AuthProvider = ({ children }) => {
             providerData: firebaseUser.providerData,
             role: role, 
           };
+
+          // Admin için ek bilgileri al
+          if (role === "admin") {
+            const adminData = adminSnap.data();
+            userData.permissions = adminData.permissions || [];
+            userData.adminSince = adminData.createdAt;
+          }
 
           setUser(userData);
         } catch (err) {
@@ -76,6 +89,9 @@ export const AuthProvider = ({ children }) => {
     userName: user?.name || user?.displayName,
     userId: user?.uid,
     role: user?.role || null,
+    isAdmin: user?.role === "admin",
+    adminPermissions: user?.permissions || [],
+    adminSince: user?.adminSince || null,
   };
 
   return (
