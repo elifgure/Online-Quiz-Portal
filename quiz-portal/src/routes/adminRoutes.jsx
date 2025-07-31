@@ -1,16 +1,33 @@
 import AdminLayout from '../layouts/AdminLayout';
+import AdminHomePage from '../pages/Admin/AdminHomePage';
+import UsersPage from '../pages/Admin/UsersPage';
 
 const adminRoutes = [
   {
     path: '/admin',
     element: <AdminLayout />,
-    index: true,
-    /*  children: [
-          {
-            path: "dashboard",
-            element: <DashboardPage />,
-          }
-        ] */
+    children: [
+      {
+        index: true, 
+        element: <AdminHomePage />, 
+      },
+      {
+        path: 'users',
+        element: <UsersPage />,
+      },
+      // {
+      //   path: 'quizzes',
+      //   element: <QuizzesPage />,
+      // },
+      // {
+      //   path: 'settings',
+      //   element: <SettingsPage />,
+      // },
+      // {
+      //   path: 'reports',
+      //   element: <ReportsPage />,
+      // },
+    ],
   },
 ];
 

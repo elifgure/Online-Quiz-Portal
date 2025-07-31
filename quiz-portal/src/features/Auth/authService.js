@@ -72,7 +72,7 @@ export const loginUser = async (email, password, role) => {
     } else if (role === "student") {
       userSnapshot = await getDoc(doc(db, "students", userCredential.user.uid));
     }else if(role === "admin"){
-      userSnapshot = await getDoc(doc, (db, "admins", userCredential.uid))
+      userSnapshot = await getDoc(doc, (db, "admins", userCredential.user.uid))
     }
     if (!userSnapshot.exists()) {
       throw new Error("Kullanıcı Bulunamadı");

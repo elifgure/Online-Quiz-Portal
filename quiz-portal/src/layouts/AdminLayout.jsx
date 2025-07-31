@@ -153,7 +153,7 @@ const AdminLayout = () => {
                           setDropdownOpen(false);
                           navigate("/admin/profile");
                         }}
-                        className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200 rounded-lg mx-2"
+                        className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200 rounded-lg"
                       >
                         Profil
                       </button>
@@ -162,7 +162,7 @@ const AdminLayout = () => {
                           setDropdownOpen(false);
                           navigate("/admin/settings");
                         }}
-                        className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200 rounded-lg mx-2"
+                        className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200 rounded-lg"
                       >
                         Ayarlar
                       </button>
@@ -172,7 +172,7 @@ const AdminLayout = () => {
                           setDropdownOpen(false);
                           handleLogout();
                         }}
-                        className="block w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200 rounded-lg mx-2"
+                        className="block w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200 rounded-lg"
                       >
                         Çıkış Yap
                       </button>
