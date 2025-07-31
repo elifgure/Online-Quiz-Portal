@@ -17,6 +17,7 @@ export const registerUser = async (userName, password, email, role) => {
       auth,
       email,
       password
+      
     );
     const user = userCredential.user;
     await sendEmailVerification(user);
@@ -49,16 +50,19 @@ export const registerUser = async (userName, password, email, role) => {
       await setDoc(doc(db, "admins", user.uid), {
         ...userData,
 
-      })
+      });
+    }
 
     return {
       success: true,
       message: "Kayıt başarılı! Lütfen e-posta adresinizi doğrulayın.",
     };
-  }} catch (error) {
+    } catch (error) {
+    
     throw new Error("hata oluştu: " + error.message);
   }
-};
+  }
+;
 export const loginUser = async (email, password, role) => {
   try {
     const userCredential = await signInWithEmailAndPassword(

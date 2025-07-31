@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { registerSchema } from "../Schemas/registerSchema"
@@ -63,11 +61,20 @@ const RegisterForm = () => {
           theme: "colored",
           transition: Zoom,
         })
+
+        // Role göre yönlendirme
+        const redirectPath = {
+          student: '/student',
+          teacher: '/teacher',
+          admin: '/admin'
+        }[role] || '/'
+
         setTimeout(() => {
-          navigate("/", {
+          navigate(redirectPath, {
             state: {
-              message: "Kayıt başarılı! Lütfen giriş yapınız.",
+              message: "Kayıt başarılı! Yönlendiriliyorsunuz...",
               email: email,
+              role: role,
             },
           })
         }, 2000)

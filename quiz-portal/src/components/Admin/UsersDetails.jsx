@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../../features/Auth/userService";
+import { deleteById, getAllUsers } from "../../features/Auth/userService";
 
 const getRoleLabel = (role) => {
   switch (role) {
@@ -34,14 +34,27 @@ const UsersDetails = () => {
         user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
+  const handleDeleteUser = async (user) => {
+    const confirmDelete = window.confirm(
+      `${user.displayName || "Bu kullanıcı"} silinsin mi?`
+    );
+    if (!confirmDelete) return;
+    const collectionName =
+      user.role === "student"
+        ? "students"
+        : user.role === "teacher"
+        ? "teachers"
+        : "admins";
+    await deleteById(user.id, collectionName);
+    setUsers((prev) => prev.filter((u) => u.id !== user.id));
+  };
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-purple-200 p-6">
       {/* Başlık */}
       <h2 className="text-2xl font-bold text-[#044c5c] mb-6">
         Kullanıcı Yönetimi
       </h2>
-      
+
       {/* Filtreler */}
       <div className="mb-6 flex flex-col sm:flex-row gap-4">
         {/* Rol Filtresi */}
@@ -60,7 +73,7 @@ const UsersDetails = () => {
             <option value="student">Öğrenci</option>
           </select>
         </div>
-        
+
         {/* Arama */}
         <div className="flex-1">
           <input
@@ -81,7 +94,7 @@ const UsersDetails = () => {
       </div>
 
       {/* Tablo Container */}
-      <div className="overflow-x-auto rounded-lg border border-purple-200">
+      <div className="overflow-x-auto rounded-lg border border-purple-200 z-0">
         <table className="min-w-full bg-white/50">
           <thead className="bg-gradient-to-r from-purple-50 to-orange-50">
             <tr>
@@ -94,6 +107,12 @@ const UsersDetails = () => {
               <th className="py-3 px-4 text-left text-sm font-semibold text-[#044c5c] border-b border-purple-200">
                 Rol
               </th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-[#044c5c] border-b border-purple-200">
+                Kayıt Tarihi
+              </th>
+              <th className="py-3 px-4 text-left text-sm font-semibold text-[#044c5c] border-b border-purple-200">
+                İşlem
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -105,10 +124,10 @@ const UsersDetails = () => {
               </tr>
             ) : (
               filteredUsers.map((user, index) => (
-                <tr 
-                  key={user.id} 
+                <tr
+                  key={user.id}
                   className={`hover:bg-gradient-to-r hover:from-purple-25 hover:to-orange-25 transition-all duration-200 ${
-                    index % 2 === 0 ? 'bg-white/30' : 'bg-white/60'
+                    index % 2 === 0 ? "bg-white/30" : "bg-white/60"
                   }`}
                 >
                   <td className="py-3 px-4 text-[#2d6c74] border-b border-purple-100">
@@ -118,15 +137,28 @@ const UsersDetails = () => {
                     {user.email}
                   </td>
                   <td className="py-3 px-4 border-b border-purple-100">
-                    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
-                      user.role === 'admin' 
-                        ? 'bg-red-100 text-red-800'
-                        : user.role === 'teacher'
-                        ? 'bg-blue-100 text-blue-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
+                    <span
+                      className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                        user.role === "admin"
+                          ? "bg-red-100 text-red-800"
+                          : user.role === "teacher"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-green-100 text-green-800"
+                      }`}
+                    >
                       {getRoleLabel(user.role)}
                     </span>
+                  </td>
+                  <td className="py-3 px-4 text-[#2d6c74] border-b border-purple-100">
+                    {new Date(user.createdAt).toLocaleDateString("tr-TR")}
+                  </td>
+                  <td className="p-2 border">
+                    <button
+                      onClick={() => handleDeleteUser(user)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      Sil
+                    </button>
                   </td>
                 </tr>
               ))

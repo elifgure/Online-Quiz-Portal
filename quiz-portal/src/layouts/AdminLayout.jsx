@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -116,7 +115,7 @@ const AdminLayout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Top Header */}
-        <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-purple-200">
+        <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-purple-200 relative z-50">
           <div className="flex items-center justify-between h-16 px-6">
             {/* Mobile menu button */}
             <button
@@ -128,7 +127,6 @@ const AdminLayout = () => {
 
             {/* Header Title */}
             <div className="flex-1 flex items-center justify-end">
-
               {/* User Profile Dropdown */}
               <div className="relative">
                 <button
@@ -136,7 +134,9 @@ const AdminLayout = () => {
                   className="flex items-center space-x-3 p-2 rounded-xl hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
                   <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-medium">{user.displayName.charAt(0)}</span>
+                    <span className="text-white text-sm font-medium">
+                      {user.displayName.charAt(0)}
+                    </span>
                   </div>
                   <span className="hidden md:block text-sm font-medium text-[#2d6c74]">
                     {user.displayName}
@@ -146,36 +146,41 @@ const AdminLayout = () => {
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl border border-purple-200 z-50">
-                    <div className="py-2">
-                      <button
-                        onClick={() => {
-                          setDropdownOpen(false);
-                          navigate("/admin/profile");
-                        }}
-                        className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200 rounded-lg"
-                      >
-                        Profil
-                      </button>
-                      <button
-                        onClick={() => {
-                          setDropdownOpen(false);
-                          navigate("/admin/settings");
-                        }}
-                        className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200 rounded-lg"
-                      >
-                        Ayarlar
-                      </button>
-                      <hr className="my-2 border-purple-200" />
-                      <button
-                        onClick={() => {
-                          setDropdownOpen(false);
-                          handleLogout();
-                        }}
-                        className="block w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200 rounded-lg"
-                      >
-                        Çıkış Yap
-                      </button>
+                  <div className="fixed inset-0 z-[60]" onClick={() => setDropdownOpen(false)}>
+                    <div 
+                      className="absolute right-6 top-[60px] w-48 bg-white/90 backdrop-blur-sm rounded-xl shadow-2xl border border-purple-200"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <div className="py-2">
+                        <button
+                          onClick={() => {
+                            setDropdownOpen(false);
+                            navigate("/admin/profile");
+                          }}
+                          className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200"
+                        >
+                          Profil
+                        </button>
+                        <button
+                          onClick={() => {
+                            setDropdownOpen(false);
+                            navigate("/admin/settings");
+                          }}
+                          className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200"
+                        >
+                          Ayarlar
+                        </button>
+                        <hr className="my-2 border-purple-200" />
+                        <button
+                          onClick={() => {
+                            setDropdownOpen(false);
+                            handleLogout();
+                          }}
+                          className="block w-full text-left px-4 py-3 text-sm text-red-500 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 transition-all duration-200"
+                        >
+                          Çıkış Yap
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -185,7 +190,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gradient-to-b from-indigo-50 to-rose-50 p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gradient-to-b from-indigo-50 to-rose-50 p-6 relative z-0">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>

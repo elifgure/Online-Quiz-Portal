@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { db } from "../../lib/fireBase";
 
 export const getAllUsers = async () => {
@@ -16,4 +16,9 @@ export const getAllUsers = async () => {
   }));
   const admins = adminSnap.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   return [...students, ...teachers, ...admins];
+};
+
+export const deleteById = async (userId, collectionName) => {
+  const userRef = doc(db, collectionName, userId);
+  await deleteDoc(userRef);
 };
