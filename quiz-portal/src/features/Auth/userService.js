@@ -14,7 +14,10 @@ export const getAllUsers = async () => {
     ...doc.data(),
     id: doc.id,
   }));
-  const admins = adminSnap.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  const admins = adminSnap.docs.map((doc) => ({
+    ...doc.data(),
+    id: doc.id,
+  }));
   return [...students, ...teachers, ...admins];
 };
 

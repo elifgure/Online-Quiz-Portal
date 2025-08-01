@@ -5,7 +5,6 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
-  sendEmailVerification,
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth, db } from "../../lib/fireBase";
@@ -13,105 +12,102 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const registerUser = async (userName, password, email, role) => {
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-      
-    );
-    const user = userCredential.user;
-    await sendEmailVerification(user);
-    await updateProfile(user, { displayName: userName });
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    const user = userCredential.user
 
+    // Önce profil güncelle
+    await updateProfile(user, {
+      displayName: userName
+    })
+
+    // Kullanıcı verilerini hazırla
     const userData = {
       userId: user.uid,
       email: user.email,
       displayName: userName,
       role: role,
       createdAt: new Date().toISOString(),
-      cardTemplates: [],
-    };
+      lastLogin: new Date().toISOString(),
+      isActive: true
+    }
 
-    if (role === "teacher") {
-      await setDoc(doc(db, "teachers", user.uid), {
-        ...userData,
-         collectionList: [],
-      });
-    } else if (role === "student") {
-      await setDoc(doc(db, "students", user.uid), {
-        userId: user.uid,
-        email: user.email,
-        displayName: userName,
-        role: role,
-        createdAt: new Date().toISOString(),
-        cardTemplates: [],
-      });
-    }else if(role === "admin") {
-      await setDoc(doc(db, "admins", user.uid), {
-        ...userData,
+    // Role göre koleksiyona kaydet
+    let collectionRef
+    switch(role) {
+      case "admin":
+        collectionRef = doc(db, "admins", user.uid)
+        await setDoc(collectionRef, {
+          ...userData,
+          permissions: ["all"],
+          adminSince: new Date().toISOString()
+        })
+        break
+      
+      case "teacher":
+        collectionRef = doc(db, "teachers", user.uid)
+        await setDoc(collectionRef, {
+          ...userData,
+          collectionList: []
+        })
+        break
+      
+      case "student":
+        collectionRef = doc(db, "students", user.uid)
+        await setDoc(collectionRef, userData)
+        break
 
-      });
+      default:
+        throw new Error("Geçersiz rol")
     }
 
     return {
       success: true,
-      message: "Kayıt başarılı! Lütfen e-posta adresinizi doğrulayın.",
-    };
-    } catch (error) {
-    
-    throw new Error("hata oluştu: " + error.message);
+      message: "Kayıt başarılı!",
+      userData: {
+        ...userData,
+        uid: user.uid
+      }
+    }
+
+  } catch (error) {
+    console.error("Kayıt hatası:", error)
+    throw error
   }
-  }
-;
+}
+
 export const loginUser = async (email, password, role) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    let userSnapshot;
-    if (role === "teacher") {
-      userSnapshot = await getDoc(doc(db, "teachers", userCredential.user.uid));
-    } else if (role === "student") {
-      userSnapshot = await getDoc(doc(db, "students", userCredential.user.uid));
-    }else if(role === "admin"){
-      userSnapshot = await getDoc(doc, (db, "admins", userCredential.user.uid))
+    const userCredential = await signInWithEmailAndPassword(auth, email, password)
+    
+    // Kullanıcı verilerini al
+    const collectionName = role + "s" // admins, teachers, students
+    const userDoc = await getDoc(doc(db, collectionName, userCredential.user.uid))
+    
+    if (!userDoc.exists()) {
+      throw new Error("Kullanıcı bulunamadı")
     }
-    if (!userSnapshot.exists()) {
-      throw new Error("Kullanıcı Bulunamadı");
-    }
-    const userData = userSnapshot.data();
+
+    const userData = userDoc.data()
+
+    // Son giriş zamanını güncelle
+    await setDoc(doc(db, collectionName, userCredential.user.uid), {
+      ...userData,
+      lastLogin: new Date().toISOString()
+    }, { merge: true })
+
     return {
-      userName: userCredential.user.displayName,
-      ...userData
-    };
+      success: true,
+      user: {
+        ...userData,
+        uid: userCredential.user.uid
+      }
+    }
+
   } catch (error) {
-    throw new Error("Giriş başarısız: " + error.message);
-    //  let errorMessage;
-    //   switch (error.code) {
-    //     case 'auth/user-not-found':
-    //       errorMessage = 'Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı.';
-    //       break;
-    //     case 'auth/wrong-password':
-    //       errorMessage = 'Hatalı şifre girdiniz.';
-    //       break;
-    //     case 'auth/invalid-email':
-    //       errorMessage = 'Geçersiz e-posta adresi.';
-    //       break;
-    //     case 'auth/too-many-requests':
-    //       errorMessage = 'Çok fazla başarısız giriş denemesi. Lütfen daha sonra tekrar deneyin.';
-    //       break;
-    //     default:
-    //       errorMessage = 'Giriş yapılırken bir hata oluştu.';
-    //   }
-    //   return {
-    //     success: false,
-    //     error: errorMessage,
-    //     code: error.code
-    //   };
+    console.error("Giriş hatası:", error)
+    throw error
   }
-};
+}
 
 export const provider = new GoogleAuthProvider();
 

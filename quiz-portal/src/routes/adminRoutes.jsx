@@ -1,5 +1,6 @@
 import AdminLayout from '../layouts/AdminLayout';
 import AdminHomePage from '../pages/Admin/AdminHomePage';
+import QuizzesPage from '../pages/Admin/QuizzesPage';
 import UsersPage from '../pages/Admin/UsersPage';
 
 const adminRoutes = [
@@ -15,10 +16,10 @@ const adminRoutes = [
         path: 'users',
         element: <UsersPage />,
       },
-      // {
-      //   path: 'quizzes',
-      //   element: <QuizzesPage />,
-      // },
+      {
+        path: 'quizzes',
+        element: <QuizzesPage />,
+      },
       // {
       //   path: 'settings',
       //   element: <SettingsPage />,

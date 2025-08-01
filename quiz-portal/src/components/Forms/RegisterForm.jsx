@@ -4,7 +4,7 @@ import { registerSchema } from "../Schemas/registerSchema"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { toast, Zoom } from "react-toastify"
 import { Mail, Lock, User, Eye, EyeOff, UserCheck, GraduationCap, Shield} from "lucide-react"
-import { registerUser } from "../../features/Auth/authService"
+import { loginUser, registerUser } from "../../features/Auth/authService"
 import { useNavigate, Link } from "react-router-dom"
 import logo from "../../assets/logo-transparent.png"
 
@@ -48,12 +48,14 @@ const RegisterForm = () => {
     try {
       const { fullName, email, password } = data
 
+      // Önce kayıt işlemini gerçekleştir
       const result = await registerUser(fullName, password, email, role)
 
       if (result.success) {
-        toast.success(result.message, {
+        // Başarılı kayıt toast mesajı
+        toast.success("Kayıt başarılı! Giriş yapılıyor...", {
           position: "bottom-right",
-          autoClose: 3000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -61,37 +63,33 @@ const RegisterForm = () => {
           theme: "colored",
           transition: Zoom,
         })
+
+        // Kullanıcı girişini yap
+        await loginUser(email, password, role)
 
         // Role göre yönlendirme
         const redirectPath = {
           student: '/student',
           teacher: '/teacher',
           admin: '/admin'
-        }[role] || '/'
+        }[role]
 
+        // Yönlendirme öncesi kısa bir gecikme
         setTimeout(() => {
           navigate(redirectPath, {
+            replace: true, // URL geçmişini temizle
             state: {
-              message: "Kayıt başarılı! Yönlendiriliyorsunuz...",
+              newUser: true,
+              displayName: fullName,
               email: email,
               role: role,
             },
           })
         }, 2000)
-      } else {
-        toast.error(result.message, {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "colored",
-          transition: Zoom,
-        })
       }
     } catch (error) {
-      toast.error("Kayıt olurken bir hata oluştu!", {
+      console.error("Kayıt hatası:", error)
+      toast.error(error.message || "Kayıt olurken bir hata oluştu!", {
         position: "bottom-right",
         autoClose: 3000,
         theme: "colored",

@@ -16,12 +16,26 @@ const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
+if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-purple-100 via-white to-orange-100">
+        <div
+          style={{
+            fontSize: "1.1rem",
+            color: "#1e293b",
+            fontWeight: "600",
+          }}
+        >
+          Kullanıcılar yükleniyor...
+        </div>
+      </div>
+    );
+  }
   const handleLogout = () => {
     // Logout işlemi burada yapılacak
     navigate("/login");
@@ -135,7 +149,7 @@ const AdminLayout = () => {
                 >
                   <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-medium">
-                      {user.displayName.charAt(0)}
+                      {user?.displayName?.charAt(0) || ''}
                     </span>
                   </div>
                   <span className="hidden md:block text-sm font-medium text-[#2d6c74]">
