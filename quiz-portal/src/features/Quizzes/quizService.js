@@ -1,7 +1,17 @@
-import { db } from "../../lib/fireBase";
-import { collection, addDoc, query, where, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
-export const saveQuiz = async (quizData) => {
+import { db } from "../../lib/fireBase";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+
+export const saveQuiz = async (quizData, user) => {
   function removeUndefinedFields(obj) {
     return Object.fromEntries(
       Object.entries(obj).filter(([, v]) => v !== undefined)
@@ -11,7 +21,17 @@ export const saveQuiz = async (quizData) => {
     const cleanData = removeUndefinedFields(quizData);
 
     const docRef = collection(db, "quizzes");
-    const docSnapShot = await addDoc(docRef, cleanData);
+    const fullQuizData = {
+      ...cleanData,
+      createdBy: {
+        uid: user.uid,
+        displayName: user.displayName || "Bilinmiyor",
+        email: user.email,
+      },
+      createdAt: new Date(),
+    };
+
+    const docSnapShot = await addDoc(docRef, fullQuizData);
     // Başarıyla kaydedildiğinde success:true dön
     return { success: true, id: docSnapShot.id };
   } catch (error) {
@@ -21,7 +41,7 @@ export const saveQuiz = async (quizData) => {
 };
 
 export const getQuizzesByUser = async (userId) => {
-  const q = query(collection(db, "quizzes"), where("createdBy", "==", userId));
+  const q = query(collection(db, "quizzes"), where("createdBy.uid", "==", userId));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };

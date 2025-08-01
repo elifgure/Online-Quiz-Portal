@@ -25,6 +25,7 @@ const FormCreate = () => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const quiz = useSelector((state) => state.quizForm.quiz);
 
+
   useEffect(() => {
     if (quiz) {
       dispatch({ type: "SET_INITIAL_STATE", payload: quiz });
@@ -127,7 +128,7 @@ const FormCreate = () => {
       if (quiz && quiz.id) {
         result = await updateQuiz(quiz.id, quizData);
       } else {
-        result = await saveQuiz(quizData);
+        result = await saveQuiz(quizData, user);
       }
 
       if (result.success) {
