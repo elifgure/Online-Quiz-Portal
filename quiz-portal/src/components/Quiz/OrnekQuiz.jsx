@@ -127,6 +127,7 @@ const OrnekQuiz = () => {
         totalQuestions: questions.length,
         details: quizResults.details,
         studentEmail: user.email,
+        role: user.role,
       };
 
       console.log("Sonuç kaydediliyor:", resultToSave);

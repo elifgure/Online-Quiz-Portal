@@ -78,13 +78,6 @@ const StudentReports = ({ result }) => {
               color={getScoreColor(result.score, result.totalQuestions)}
               size="small"
             />
-            {/* <Chip
-              icon={<Clock className="w-4 h-4" />}
-              label={new Date(result.createdAt).toLocaleDateString()}
-              // variant="outlined"
-              
-              size="small"
-            /> */}
           </Box>
         </Box>
       </AccordionSummary>

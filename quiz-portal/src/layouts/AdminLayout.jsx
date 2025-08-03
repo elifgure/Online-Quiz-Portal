@@ -55,12 +55,6 @@ if (loading) {
       description: "Tüm quizleri görüntüleyin ve yönetin",
     },
     {
-      title: "Sistem Ayarları",
-      icon: Settings,
-      path: "/admin/settings",
-      description: "Platform ayarlarını yapılandırın",
-    },
-    {
       title: "Raporlar",
       icon: BarChart3,
       path: "/admin/reports",

@@ -197,22 +197,6 @@ const ReportsPage = () => {
                   Toplam Rapor
                 </div>
               </div>
-              
-              {/* <div style={{
-                background: 'rgba(255,255,255,0.2)',
-                padding: '1.5rem 2rem',
-                borderRadius: '16px',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                minWidth: '120px'
-              }}>
-                <div style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>
-                  {results?.filter(r => (r.score / r.totalQuestions) >= 0.8).length || 0}
-                </div>
-                <div style={{ fontSize: '0.9rem', opacity: '0.9' }}>
-                  Başarılı
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

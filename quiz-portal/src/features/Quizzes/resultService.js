@@ -14,7 +14,7 @@ export const saveStudentResult = async (resultData) => {
   try {
     const docRef = await addDoc(collection(db, "results"), {
       ...resultData,
-
+      role: resultData.role,
       createdAt: serverTimestamp(),
     });
     return docRef.id; // yeni eklenen belgenin ID'sini döndür
