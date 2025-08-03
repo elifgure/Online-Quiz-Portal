@@ -1,5 +1,6 @@
 import AdminLayout from "../layouts/AdminLayout";
 import AdminHomePage from "../pages/Admin/AdminHomePage";
+import EditQuizPage from "../pages/Admin/EditQuizPage";
 import QuizDetailPage from "../pages/Admin/QuizDetailPage";
 import QuizzesPage from "../pages/Admin/QuizzesPage";
 import UsersPage from "../pages/Admin/UsersPage";
@@ -25,6 +26,12 @@ const adminRoutes = [
         path: "quizzes/detail/:quizId",
         element: <QuizDetailPage />,
       },
+       {
+        path: "edit-quiz/:quizId",
+        element: <EditQuizPage />,
+      },
+      
+
       // {
       //   path: 'settings',
       //   element: <SettingsPage />,

@@ -114,7 +114,7 @@ const QuizList = () => {
                         <span>Detay</span>
                       </Link>
                       <Link
-                        to={`/admin-quizzes/edit/${quiz.id}`}
+                        to={`/admin/edit-quiz/${quiz.id}`}
                         className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-medium transition-colors duration-200"
                         title="Quiz'i Düzenle"
                       >
