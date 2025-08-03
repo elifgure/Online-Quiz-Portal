@@ -1,24 +1,29 @@
-import AdminLayout from '../layouts/AdminLayout';
-import AdminHomePage from '../pages/Admin/AdminHomePage';
-import QuizzesPage from '../pages/Admin/QuizzesPage';
-import UsersPage from '../pages/Admin/UsersPage';
+import AdminLayout from "../layouts/AdminLayout";
+import AdminHomePage from "../pages/Admin/AdminHomePage";
+import QuizDetailPage from "../pages/Admin/QuizDetailPage";
+import QuizzesPage from "../pages/Admin/QuizzesPage";
+import UsersPage from "../pages/Admin/UsersPage";
 
 const adminRoutes = [
   {
-    path: '/admin',
+    path: "/admin",
     element: <AdminLayout />,
     children: [
       {
-        index: true, 
-        element: <AdminHomePage />, 
+        index: true,
+        element: <AdminHomePage />,
       },
       {
-        path: 'users',
+        path: "users",
         element: <UsersPage />,
       },
       {
-        path: 'quizzes',
+        path: "quizzes",
         element: <QuizzesPage />,
+      },
+      {
+        path: "quizzes/detail/:quizId",
+        element: <QuizDetailPage />,
       },
       // {
       //   path: 'settings',
