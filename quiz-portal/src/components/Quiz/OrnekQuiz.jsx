@@ -128,6 +128,9 @@ const OrnekQuiz = () => {
         details: quizResults.details,
         studentEmail: user.email,
         role: user.role,
+        duration: duration,
+        timeSpent: TOTAL_TIME - timeRemaining,
+        
       };
 
       console.log("Sonuç kaydediliyor:", resultToSave);
