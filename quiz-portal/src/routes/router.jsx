@@ -6,6 +6,7 @@ import adminRoutes from "./adminRoutes";
 
 import ProtectedRoute from "../components/guards/ProtectedRoute";
 import RoleBasedRoute from "../components/guards/RoleBasedRoute";
+import NotFoundPage from "../pages/NotFoundPage";
 
 
 const teacherOnlyRoutes = ["teacher", "create-quiz2", "my-quiz"];
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
 
   {
     path: "*",
-    element: <h1>404 Not Found</h1>,
+    element: <NotFoundPage />,
   },
 ]);
 
