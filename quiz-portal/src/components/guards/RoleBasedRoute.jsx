@@ -5,7 +5,7 @@ const RoleBasedRoute = ({ children, requiredRole }) => {
   const { user, loading, role } = useAuth();
 
 
-  if (loading) return null;
+  if (loading || !role) return null;
 
   if (!user) return <Navigate to="/login" replace />;
 

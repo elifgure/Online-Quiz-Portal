@@ -31,12 +31,6 @@ const adminRoutes = [
         path: "edit-quiz/:quizId",
         element: <EditQuizPage />,
       },
-      
-
-      // {
-      //   path: 'settings',
-      //   element: <SettingsPage />,
-      // },
       {
         path: 'reports',
         element: <ReportsPage />,

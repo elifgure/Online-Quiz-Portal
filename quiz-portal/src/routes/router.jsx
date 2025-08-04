@@ -10,44 +10,33 @@ import RoleBasedRoute from "../components/guards/RoleBasedRoute";
 
 const teacherOnlyRoutes = ["teacher", "create-quiz2", "my-quiz"];
 const studentOnlyRoutes = ["student", "student-quizzes"];
+const adminOnlyRoutes = ["admin", "users", "quizzes", "edit-quiz", "reports"];
+
+const getBasePath = (path) => {
+  if (!path) return "";
+  const parts = path.startsWith("/") ? path.slice(1).split("/") : path.split("/");
+  return parts[0];
+};
 
 const wrapWithGuards = (routes) =>
   routes.map((route) => {
-     
-    // Öğretmen koruması
-    if (teacherOnlyRoutes.includes(route.path)) {
-      return {
-        ...route,
-        element: (
-          <RoleBasedRoute requiredRole="teacher">
-            {route.element}
-          </RoleBasedRoute>
-        ),
-      };
+    const basePath = getBasePath(route.path);
+    let element = route.element;
+
+    if (adminOnlyRoutes.includes(basePath)) {
+      element = <RoleBasedRoute requiredRole="admin">{element}</RoleBasedRoute>;
+    } else if (teacherOnlyRoutes.includes(basePath)) {
+      element = <RoleBasedRoute requiredRole="teacher">{element}</RoleBasedRoute>;
+    } else if (studentOnlyRoutes.includes(basePath)) {
+      element = <RoleBasedRoute requiredRole="student">{element}</RoleBasedRoute>;
+    } else {
+      element = <ProtectedRoute>{element}</ProtectedRoute>;
     }
 
-    // Öğrenci koruması
-    if (studentOnlyRoutes.includes(route.path)) {
-      
-      return {
-        ...route,
-        element: (
-          <RoleBasedRoute requiredRole="student">
-            {route.element}
-          </RoleBasedRoute>
-        ),
-      };
-    }
-
-    // Diğer main/admin route'lar için login yeterli
-   
     return {
       ...route,
-      element: (
-        <ProtectedRoute>
-          {route.element}
-        </ProtectedRoute>
-      ),
+      element,
+      children: route.children ? wrapWithGuards(route.children) : undefined,
     };
   });
 
