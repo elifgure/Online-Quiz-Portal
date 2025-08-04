@@ -56,37 +56,27 @@ const LandingPage = () => {
                 <>
                   <div className="flex flex-col sm:flex-row gap-6">
                     <Link
-                      to="/quiz-list"
-                      className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 border-2 border-purple-600 relative overflow-hidden"
-                    >
-                      <span className="relative z-10">Quizlere Göz At</span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                    </Link>
-
-                    <Link
                       to="/login"
                       className="group bg-white/90 backdrop-blur-sm border-2 border-orange-400 text-orange-600 hover:text-white hover:bg-orange-500 font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                     >
                       Giriş Yap
                     </Link>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-6">
+                    
                     <Link
                       to="/register"
                       className="group bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-blue-500"
                     >
                       Kayıt Ol
                     </Link>
-
-                    <Link
-                      to="/create-quiz2"
-                      className="group bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 relative overflow-hidden"
-                    >
-                      <span className="relative z-10">Quiz Oluştur</span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                    </Link>
                   </div>
+
+                  <Link
+                    to="/quiz-list"
+                    className="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 border-2 border-purple-600 relative overflow-hidden"
+                  >
+                    <span className="relative z-10">Quizlere Göz At</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                  </Link>
                 </>
               )}
             </div>

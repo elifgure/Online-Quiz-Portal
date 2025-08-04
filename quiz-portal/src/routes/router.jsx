@@ -1,4 +1,3 @@
-// src/routes/router.jsx
 import { createBrowserRouter } from "react-router-dom";
 import mainRoutes from "./mainRoutes";
 import authRoutes from "./authRoutes";

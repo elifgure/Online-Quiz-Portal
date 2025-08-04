@@ -26,6 +26,7 @@ const mainRoutes = [
   {
     path: "quiz-list",
     element: <QuizListPage />,
+    shouldProtect: false,
   },
 
   {
