@@ -8,14 +8,15 @@ import ProtectedRoute from "../components/guards/ProtectedRoute";
 import RoleBasedRoute from "../components/guards/RoleBasedRoute";
 import NotFoundPage from "../pages/NotFoundPage";
 
-
 const teacherOnlyRoutes = ["teacher", "create-quiz2", "my-quiz"];
 const studentOnlyRoutes = ["student", "student-quizzes"];
 const adminOnlyRoutes = ["admin", "users", "quizzes", "edit-quiz", "reports"];
 
 const getBasePath = (path) => {
   if (!path) return "";
-  const parts = path.startsWith("/") ? path.slice(1).split("/") : path.split("/");
+  const parts = path.startsWith("/")
+    ? path.slice(1).split("/")
+    : path.split("/");
   return parts[0];
 };
 
@@ -24,12 +25,20 @@ const wrapWithGuards = (routes) =>
     const basePath = getBasePath(route.path);
     let element = route.element;
 
+    if (route.shouldProtect === false) {
+      return route;
+    }
+
     if (adminOnlyRoutes.includes(basePath)) {
       element = <RoleBasedRoute requiredRole="admin">{element}</RoleBasedRoute>;
     } else if (teacherOnlyRoutes.includes(basePath)) {
-      element = <RoleBasedRoute requiredRole="teacher">{element}</RoleBasedRoute>;
+      element = (
+        <RoleBasedRoute requiredRole="teacher">{element}</RoleBasedRoute>
+      );
     } else if (studentOnlyRoutes.includes(basePath)) {
-      element = <RoleBasedRoute requiredRole="student">{element}</RoleBasedRoute>;
+      element = (
+        <RoleBasedRoute requiredRole="student">{element}</RoleBasedRoute>
+      );
     } else {
       element = <ProtectedRoute>{element}</ProtectedRoute>;
     }
@@ -42,7 +51,7 @@ const wrapWithGuards = (routes) =>
   });
 
 const router = createBrowserRouter([
-  ...authRoutes, 
+  ...authRoutes,
 
   ...wrapWithGuards(mainRoutes),
   ...wrapWithGuards(adminRoutes),
@@ -54,4 +63,3 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
-

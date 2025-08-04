@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   fetchSignInMethodsForEmail,
   getAuth,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth, db } from "../../lib/fireBase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -132,7 +133,15 @@ export const loginWithGoogle = async () => {
     throw new Error("Google ile giriş başarısız: " + error.message);
   }
 };
-
+export const sendResetEmail = async (email) =>{
+  try {
+    await sendPasswordResetEmail(auth, email) 
+    return { success: true, message: "Şifre sıfırlama e-postası gönderildi." };
+  } catch (error) {
+    console.error("Şifre sıfırlama e-postası gönderilirken hata oluştu:", error);
+    return { success: false, error };
+  }
+}
 export const logOut = async () => {
   try {
     await signOut(auth);

@@ -13,6 +13,7 @@ const mainRoutes = [
   {
     path: "/",
     element: <LandingPage />,
+    shouldProtect: false,
   },
   {
     path: "/quiz1",

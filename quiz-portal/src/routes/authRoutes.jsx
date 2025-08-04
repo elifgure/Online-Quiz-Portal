@@ -1,5 +1,6 @@
 import LoginPage from "../pages/Auth/LoginPage";
 import RegisterPage from "../pages/Auth/RegisterPage";
+import ForgotPasswordPage from "../pages/Auth/ForgotPasswordPage";
 
 const authRoutes =[
     {
@@ -9,6 +10,10 @@ const authRoutes =[
     {
         path: "/register",
         element: <RegisterPage />
+    },
+    {
+        path: "/forgot-password",
+        element: <ForgotPasswordPage />
     }
 ]
 export default authRoutes;
