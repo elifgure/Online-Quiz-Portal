@@ -6,6 +6,8 @@ import {
   signOut,
   updateProfile,
   GoogleAuthProvider,
+  fetchSignInMethodsForEmail,
+  getAuth,
 } from "firebase/auth";
 import { auth, db } from "../../lib/fireBase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -106,6 +108,17 @@ export const loginUser = async (email, password, role) => {
   } catch (error) {
     console.error("Giriş hatası:", error)
     throw error
+  }
+}
+
+export const checkEmailExists = async (email) =>{
+  try {
+    const auth = getAuth();
+    const signInMethods = await fetchSignInMethodsForEmail(auth, email)
+    return signInMethods.length > 0
+  } catch (error) {
+    console.error("E-posta kontrol hatası:", error)
+    
   }
 }
 

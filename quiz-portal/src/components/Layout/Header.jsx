@@ -133,7 +133,7 @@ const Header = () => {
                         </Link>
                         
                         <Link
-                          to={user?.role === "teacher" ? "/reports" : "/results"}
+                          to={user?.role === "teacher" ? "/treports" : "/results"}
                           onClick={handleMenuItemClick}
                           className="flex items-center space-x-3 px-4 py-2 text-sm text-[#044c5c] hover:bg-purple-50 transition-colors duration-200"
                         >

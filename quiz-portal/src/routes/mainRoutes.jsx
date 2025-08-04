@@ -48,7 +48,7 @@ const mainRoutes = [
     element: <ResultsPage />,
   },
   {
-    path: "/reports",
+    path: "/treports",
     element: <ReportsPage />,
   },
 ];

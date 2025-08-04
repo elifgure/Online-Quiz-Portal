@@ -25,7 +25,7 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {/* Brand Section */}
             <div className="lg:col-span-1 -mt-8">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-2">
                 <img
                   src={logo || "/assets/logo-transparent.png"}
                   alt="QuizPortal Logo"
@@ -64,10 +64,7 @@ const Footer = () => {
               <ul className="space-y-3">
                 {[
                   { label: "Ana Sayfa", href: "/" },
-                  { label: "Quizler", href: "/quizzes" },
-                  { label: "Quiz Oluştur", href: "/create-quiz" },
-                  { label: "Kategoriler", href: "/categories" },
-                  { label: "Liderlik Tablosu", href: "/leaderboard" },
+                  { label: "Quizler", href: "/quiz-list" },
                   { label: "Hakkımızda", href: "/about" },
                 ].map(({ label, href }) => (
                   <li key={label}>

@@ -142,12 +142,12 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-center text-[#044c5c] mb-16">
             Neden{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent ">
               QuizPortal?
             </span>
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mt-6">
             <div className="group bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg hover:shadow-2xl border border-purple-200 transition-all duration-300 hover:-translate-y-2">
               <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-2xl">🧠</span>

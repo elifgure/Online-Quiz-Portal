@@ -135,10 +135,10 @@ const StudentLayout = () => {
 
         {/* Welcome Section */}
         <div className="mb-8 relative z-10">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-[#044c5c] via-purple-600 to-orange-500 bg-clip-text text-transparent mb-2">
+          <h2 className="text-4xl font-bold text-[#044c5c] mb-2">
             Hoş Geldiniz! 👋 
           </h2>
-          <p className="text-[#2d6c74] text-lg">
+          <p className="text-[#2d6c74] text-lg mt-2">
             Sınavlarınızı yönetin ve raporlarınızı inceleyin.
           </p>
         </div>

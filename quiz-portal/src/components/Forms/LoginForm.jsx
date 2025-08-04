@@ -14,7 +14,7 @@ import {
   Shield,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../features/Auth/authService";
+import { loginUser, checkEmailExists } from "../../features/Auth/authService";
 import logo from "../../assets/logo-transparent.png";
 
 const LoginForm = () => {
@@ -37,6 +37,20 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
+      // Önce email kontrolü yap
+      const userExists = await checkEmailExists(data.email);
+      if (!userExists) {
+        toast.error("Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı", {
+          position: "bottom-right",
+          autoClose: 3000,
+          theme: "colored",
+          transition: Zoom,
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Email varsa login işlemine devam et
       const result = await loginUser(data.email, data.password, role);
       if (result && role === "student") {
         navigate("/student");
@@ -55,8 +69,6 @@ const LoginForm = () => {
           theme: "colored",
           transition: Zoom,
         });
-      } else if (err.message.includes("auth/user-not-found")) {
-        setLoginError("Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı.");
       } else if (err.message.includes("auth/wrong-password")) {
         setLoginError("Hatalı şifre girdiniz.");
       }
