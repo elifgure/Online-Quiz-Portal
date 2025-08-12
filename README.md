@@ -24,10 +24,4 @@
 
 🎨 Tailwind CSS	Modern ve hızlı stil altyapısı
 
-## Kurulum
-```bash
-git clone https://github.com/elifgure/Online-Quiz-Portal.git
-cd Online-Quiz-Portal
-npm install
-npm start
 
