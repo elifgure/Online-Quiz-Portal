@@ -1,4 +1,4 @@
-#  :tw-1f4dd: Online Quiz Portal
+#  Online Quiz Portal
 
 **Online Quiz Portal**, öğretmenlerin sınav oluşturmalarını ve öğrencilerin bu sınavlara katılmalarını sağlayan basit bir web uygulamasıdır.
 
@@ -10,12 +10,18 @@
 - Sınav geçmişi ve performans takibi
   
 🛠️ Kullanılan Teknolojiler
-Teknoloji	Açıklama
+
+
 ⚛️ React + Vite	Hızlı ve modern frontend geliştirme
+
 🔄 Redux Toolkit + Redux Thunk	Global durum ve asenkron veri yönetimi
+
 🔀 React Router DOM	Sayfalar arası yönlendirme
+
 🧾 React Hook Form + Yup	Form oluşturma ve validasyon
+
 🔥 Firebase	Auth, Firestore, Admin SDK ile veri ve kullanıcı yönetimi
+
 🎨 Tailwind CSS	Modern ve hızlı stil altyapısı
 
 ## Kurulum
