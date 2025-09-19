@@ -7,5 +7,5 @@ export default defineConfig({
   build: {
     outDir: 'dist',     // Vercel’in deploy edeceği klasör
   },
-  base: './',            // Eğer Vercel'de alt route'lar varsa, bu önemli
+  base: '/',            // Eğer Vercel'de alt route'lar varsa, bu önemli
 })
