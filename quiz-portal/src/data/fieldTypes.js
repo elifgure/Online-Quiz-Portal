@@ -9,15 +9,6 @@ import {
 } from "lucide-react";
 
 export const fieldTypes = [
-   {
-    type: "logo",
-    label: "Logo",
-    icon: Tag,
-    component: "LogoField",
-    color: "from-orange-500 to-yellow-500",
-  },
-  
- 
   {
     type: "shortText",
     label: "Kısa Yanıt",

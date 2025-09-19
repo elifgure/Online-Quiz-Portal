@@ -14,12 +14,12 @@ import {
   Shield,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, checkEmailExists } from "../../features/Auth/authService";
+import { loginUser} from "../../features/Auth/authService";
 import logo from "../../assets/logo-transparent.png";
 
 const LoginForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loginError, setLoginError] = useState(null);
+
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("student");
   const navigate = useNavigate();
@@ -37,20 +37,6 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      // Önce email kontrolü yap
-      const userExists = await checkEmailExists(data.email);
-      if (!userExists) {
-        toast.error("Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı", {
-          position: "bottom-right",
-          autoClose: 3000,
-          theme: "colored",
-          transition: Zoom,
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Email varsa login işlemine devam et
       const result = await loginUser(data.email, data.password, role);
       if (result && role === "student") {
         navigate("/student");
@@ -61,16 +47,28 @@ const LoginForm = () => {
       }
       reset();
     } catch (err) {
-      console.log("Bilinmeyen hata:", err.message);
-      if (err.message.includes("auth/invalid-credential")) {
+      console.log("Giriş hatası:", err.message);
+      if (
+        err.message.includes("invalid-credential") ||
+        err.message.includes("wrong-password")
+      ) {
         toast.error("E-posta veya şifre hatalı", {
           position: "bottom-right",
           autoClose: 3000,
           theme: "colored",
-          transition: Zoom,
         });
-      } else if (err.message.includes("auth/wrong-password")) {
-        setLoginError("Hatalı şifre girdiniz.");
+      } else if (err.message.includes("rolü ile kayıtlı")) {
+        toast.error(err.message, {
+          position: "bottom-right",
+          autoClose: 3000,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Giriş başarısız", {
+          position: "bottom-right",
+          autoClose: 3000,
+          theme: "colored",
+        });
       }
     } finally {
       setIsSubmitting(false);

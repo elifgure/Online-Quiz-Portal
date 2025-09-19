@@ -132,13 +132,14 @@ const ReportsPage = () => {
         {/* Decorative elements */}
         <div style={{
           position: 'absolute',
-          top: '20%',
+          top: '70%',
           right: '10%',
           width: '200px',
           height: '200px',
           background: 'rgba(255,255,255,0.1)',
           borderRadius: '50%',
-          backdropFilter: 'blur(10px)'
+          backdropFilter: 'blur(10px)',
+        
         }}></div>
         <div style={{
           position: 'absolute',
@@ -148,7 +149,8 @@ const ReportsPage = () => {
           height: '150px',
           background: 'rgba(255,255,255,0.08)',
           borderRadius: '50%',
-          backdropFilter: 'blur(10px)'
+          backdropFilter: 'blur(10px)',
+          
         }}></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -157,7 +159,8 @@ const ReportsPage = () => {
               fontSize: '3rem',
               fontWeight: '700',
               marginBottom: '1rem',
-              textShadow: '0 4px 20px rgba(0,0,0,0.3)'
+              textShadow: '0 4px 20px rgba(0,0,0,0.3)',
+              
             }}>
               📊 {role === 'teacher' ? 'Öğrenci Raporları' : 'Sonuçlarım'}
             </h1>

@@ -9,7 +9,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 
 const teacherOnlyRoutes = ["teacher", "create-quiz2", "my-quiz"];
 const studentOnlyRoutes = ["student", "student-quizzes"];
-const adminOnlyRoutes = ["admin", "users", "quizzes", "edit-quiz", "reports"];
+const adminOnlyRoutes = ["admin", "users", "quizzes", "edit-quiz", "reports", "quiz-form"];
 
 const getBasePath = (path) => {
   if (!path) return "";

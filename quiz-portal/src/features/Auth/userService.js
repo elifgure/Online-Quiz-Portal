@@ -1,10 +1,10 @@
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../lib/fireBase";
 
 export const getAllUsers = async () => {
-  const studentSnap = await getDocs(collection(db, "students"));
-  const teacherSnap = await getDocs(collection(db, "teachers"));
-  const adminSnap = await getDocs(collection(db, "admins"));
+  const studentSnap = await getDocs(query(collection(db, "students"), orderBy("createdAt", "desc")));
+  const teacherSnap = await getDocs(query(collection(db, "teachers"), orderBy("createdAt", "desc")));
+  const adminSnap = await getDocs(query(collection(db, "admins"), orderBy("createdAt", "desc")));
 
   const students = studentSnap.docs.map((doc) => ({
     ...doc.data(),

@@ -1,5 +1,6 @@
 import AdminLayout from "../layouts/AdminLayout";
 import AdminHomePage from "../pages/Admin/AdminHomePage";
+import AdminQuizForm from "../components/Admin/AdminQuizForm";
 import EditQuizPage from "../pages/Admin/EditQuizPage";
 import QuizDetailPage from "../pages/Admin/QuizDetailPage";
 import QuizzesPage from "../pages/Admin/QuizzesPage";
@@ -35,6 +36,10 @@ const adminRoutes = [
         path: 'reports',
         element: <ReportsPage />,
       },
+      {
+        path: "/admin/quiz-form",
+        element: <AdminQuizForm />
+      }
     ],
   },
 ];

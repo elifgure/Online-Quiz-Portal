@@ -237,10 +237,11 @@ const RegisterForm = () => {
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
-                  {errors.password && (
+                  
+                </div>
+                {errors.password && (
                     <p className="text-xs text-red-500 font-medium mt-1 ml-1">{errors.password.message}</p>
                   )}
-                </div>
               </div>
 
               {/* Terms Checkbox - Kompakt */}

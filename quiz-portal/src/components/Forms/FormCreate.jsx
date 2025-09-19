@@ -1,13 +1,13 @@
 import { useEffect, useReducer, useState } from "react";
 import {
   Component,
-  Palette,
   ChevronDown,
   Plus,
   Eye,
   Save,
   Share2,
 } from "lucide-react";
+import Header from "../Layout/Header";
 import { fieldTypes } from "../../data/fieldTypes";
 import { formReducer, initialState } from "../../reducers/formReducer";
 import DynamicField from "./DynamicField";
@@ -25,10 +25,11 @@ const FormCreate = () => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const quiz = useSelector((state) => state.quizForm.quiz);
 
-
   useEffect(() => {
-    if (quiz) {
+    if (quiz && quiz.id) {
       dispatch({ type: "SET_INITIAL_STATE", payload: quiz });
+      
+    }else{
       dispatch(clearQuizForm());
     }
   }, [quiz]);
@@ -133,9 +134,12 @@ const FormCreate = () => {
 
       if (result.success) {
         toast.success("Quiz başarıyla kaydedildi!");
-        navigate("/my-quiz");
-      } else {
-        toast.error("Quiz kaydedilemedi!");
+        // Rol bazlı yönlendirme
+        if (user?.role === "admin") {
+          navigate("/admin/quizzes");
+        } else {
+          navigate("/my-quiz");
+        }
       }
     } catch (error) {
       console.error("Quiz kaydetme hatası:", error);
@@ -149,7 +153,7 @@ const FormCreate = () => {
         id={element.id}
         type={element.type}
         label={element.label}
-        answer={element.answer} // Bunu ekleyin
+        answer={element.answer}
         placeholder={element.placeholder}
         required={element.required}
         value={element.value}
@@ -158,7 +162,7 @@ const FormCreate = () => {
         onLabelChange={(label) => handleElementLabelChange(element.id, label)}
         onAnswerChange={(answer) =>
           handleElementAnswerChange(element.id, answer)
-        } // Bunu ekleyin
+        }
         onOptionsChange={(options) =>
           handleElementOptionsChange(element.id, options)
         }
@@ -231,7 +235,8 @@ const FormCreate = () => {
       <div className="absolute bottom-40 right-1/3 w-24 h-24 bg-[#33a393]/10 rounded-full blur-xl"></div>
 
       {/* Toolbar */}
-      <div className="relative z-10 bg-white/90 backdrop-blur-sm border-b border-purple-200/30 px-6 py-4 shadow-sm">
+    {user?.role !== "admin" && <Header />}
+      <div className="relative z-10 bg-white/90 backdrop-blur-sm border-b border-purple-200/30 px-20 py-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <input
@@ -295,22 +300,10 @@ const FormCreate = () => {
                 Elementler
               </span>
             </div>
-
-            {/* Tasarım Tab */}
-            <div className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-purple-50/50 cursor-pointer transition-all duration-200">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white shadow-sm border border-purple-200/50">
-                <Palette className="w-4 h-4 text-[#37747c]" />
-              </div>
-              <span className="text-xs font-medium text-[#37747c] text-center">
-                Tasarım
-              </span>
-            </div>
           </div>
 
           {/* Right Content Area */}
           <div className="flex-1 flex flex-col">
-            
-
             {/* Elements List */}
             <div className="flex-1 overflow-y-auto p-4">
               {/* Temel Alanlar Section */}

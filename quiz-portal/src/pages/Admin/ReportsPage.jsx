@@ -54,7 +54,11 @@ const ReportsPage = () => {
     setModalOpen(false);
     setSelectedResult(null);
   };
-
+const roleMap = {
+  student: "Öğrenci",
+  teacher: "Öğretmen",
+  admin: "Admin"
+}
   return (
     <Box className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-purple-200 p-6">
       {/* Başlık */}
@@ -353,7 +357,7 @@ const ReportsPage = () => {
                   </Typography>
                   <Typography sx={{ color: "#2d6c74" }}>
                     <strong>Rol:</strong>{" "}
-                    {selectedResult.role || "Belirtilmemiş"}
+                    {roleMap[selectedResult.role] || "Bilinmiyor"}
                   </Typography>
                 </Box>
               </Box>
@@ -435,10 +439,10 @@ const ReportsPage = () => {
 
               {/* Soru Detayları */}
               {selectedResult.details && selectedResult.details.length > 0 && (
-                <Box mb={3}>
+                <Box mb={3} mt={4}>
                   <Typography
                     variant="h6"
-                    sx={{ color: "#044c5c", mb: 2, fontWeight: 600 }}
+                    sx={{ color: "green", mb: 2, fontWeight: 600 }}
                   >
                     Soru Detayları
                   </Typography>

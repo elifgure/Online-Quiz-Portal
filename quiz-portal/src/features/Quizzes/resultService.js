@@ -51,7 +51,8 @@ export const getResultsByStudent = async (studentId) => {
 export const getAllResults = async () => {
   try {
     const resultsRef = collection(db, "results");
-    const querySnapshot = await getDocs(resultsRef);
+    const q = query(resultsRef, orderBy("createdAt", "desc"))
+    const querySnapshot = await getDocs(q);
     const results = [];
     querySnapshot.forEach((doc) => {
       results.push({

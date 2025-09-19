@@ -21,7 +21,7 @@ const EditQuizPage = () => {
             id: quizDoc.id
           };
           dispatch(setQuizForEdit(quizData));
-          navigate('/create-quiz2'); // Mevcut quiz oluşturma formuna yönlendir
+          navigate('/admin/quiz-form'); // Admin için doğru path'e yönlendir
         } else {
           console.error("Quiz bulunamadı");
           navigate('/admin/quizzes');

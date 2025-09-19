@@ -36,7 +36,7 @@ const QuizList = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-[#044c5c]">Quiz Yönetimi</h2>
         <Link
-          to="/create-quiz2"
+          to="/admin/quiz-form"
           className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg"
         >
           + Yeni Quiz
