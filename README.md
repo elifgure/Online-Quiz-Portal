@@ -72,7 +72,7 @@
 - Kullanıcı kimliği ve rolüne göre erişim kontrolü
 - Veritabanı, depolama ve diğer hizmetler için güvenlik
 
-## 📁 Proje Yapısı
+<!-- ## 📁 Proje Yapısı
 
 quiz-portal/
 ├── 📁 src
@@ -93,7 +93,7 @@ quiz-portal/
 │ │ ├── 📁 Auth
 │ │ └── 📁 Student
 │ ├── 📁 redux
-│ ├── 📁 routes
+│ ├── 📁 routes -->
 
 📄 Lisans
 Bu proje MIT lisansı altında lisanslanmıştır. 
