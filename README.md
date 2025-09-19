@@ -73,26 +73,27 @@
 - Veritabanı, depolama ve diğer hizmetler için güvenlik
 
 ## 📁 Proje Yapısı
+
 quiz-portal/
-├── 📁 src/ 
-│ ├── 📁 components/ 
-│ │ ├── 📁 Admin/ 
-│ │ ├── 📁 Forms/ 
-│ │ ├── 📁 Layout/ 
-│ │ ├── 📁 Quiz/ 
-│ │ ├── 📁 Schemas/
-│ ├── 📁 context/
-│ ├── 📁 features/ 
-│ │ ├── 📁 Auth/ 
-│ │ └── 📁 Quizzes/
-│ ├── 📁 layouts/ 
-│ ├── 📁 lib/
-│ ├── 📁 pages/ 
-│ │ ├── 📁 Admin/ 
-│ │ ├── 📁 Auth/ 
-│ │ └── 📁 Student/ 
-│ ├── 📁 redux/ 
-│ ├── 📁 routes/
+├── 📁 src
+│ ├── 📁 components
+│ │ ├── 📁 Admin
+│ │ ├── 📁 Forms
+│ │ ├── 📁 Layout
+│ │ ├── 📁 Quiz
+│ │ ├── 📁 Schemas
+│ ├── 📁 context
+│ ├── 📁 features
+│ │ ├── 📁 Auth
+│ │ └── 📁 Quizzes
+│ ├── 📁 layouts
+│ ├── 📁 lib
+│ ├── 📁 pages
+│ │ ├── 📁 Admin
+│ │ ├── 📁 Auth
+│ │ └── 📁 Student
+│ ├── 📁 redux
+│ ├── 📁 routes
 
 📄 Lisans
 Bu proje MIT lisansı altında lisanslanmıştır. 
