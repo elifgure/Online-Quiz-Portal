@@ -128,9 +128,47 @@ export const provider = new GoogleAuthProvider();
 export const loginWithGoogle = async () => {
   try {
     const userCredential = await signInWithPopup(auth, provider);
-    return userCredential;
+    const user = userCredential.user;
+
+    // Kullanıcının hangi koleksiyonda olduğunu kontrol et
+    const collections = ['students', 'teachers', 'admins'];
+    let userData = null;
+    let userRole = null;
+
+    for (const collection of collections) {
+      const userDoc = await getDoc(doc(db, collection, user.uid));
+      if (userDoc.exists()) {
+        userData = userDoc.data();
+        userRole = userData.role;
+        break;
+      }
+    }
+
+    // Eğer kullanıcı bulunamazsa, girişi reddet ve hesabı çıkış yap
+    if (!userData) {
+      await signOut(auth); // Firebase'den çıkış yap
+      throw new Error("Bu Google hesabı sistemde kayıtlı değil. Lütfen önce normal kayıt işlemi yapın.");
+    }
+
+    // Varolan kullanıcı için son giriş zamanını güncelle
+    const collectionName = userRole + "s";
+    await setDoc(doc(db, collectionName, user.uid), {
+      ...userData,
+      lastLogin: new Date().toISOString(),
+      photoURL: user.photoURL
+    }, { merge: true });
+
+    return {
+      success: true,
+      user: {
+        ...userData,
+        uid: user.uid
+      }
+    };
+
   } catch (error) {
-    throw new Error("Google ile giriş başarısız: " + error.message);
+    console.error("Google ile giriş hatası:", error);
+    throw error; // Orijinal hata mesajını koru
   }
 };
 export const sendResetEmail = async (email) =>{

@@ -1,12 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import {
-  Component,
-  ChevronDown,
-  Plus,
-  Eye,
-  Save,
-  Share2,
-} from "lucide-react";
+import { Component, ChevronDown, Plus, Eye, Save, Share2 } from "lucide-react";
 import Header from "../Layout/Header";
 import { fieldTypes } from "../../data/fieldTypes";
 import { formReducer, initialState } from "../../reducers/formReducer";
@@ -28,8 +21,7 @@ const FormCreate = () => {
   useEffect(() => {
     if (quiz && quiz.id) {
       dispatch({ type: "SET_INITIAL_STATE", payload: quiz });
-      
-    }else{
+    } else {
       dispatch(clearQuizForm());
     }
   }, [quiz]);
@@ -120,8 +112,12 @@ const FormCreate = () => {
       title: state.title,
       duration: Number(state.duration),
       category: state.category,
-      createdBy: user?.uid || "anonymous",
+      createdBy: {
+        uid: user?.uid || "anonymous",
+        displayName: user?.displayName || "Anonim",
+      },
       elements: state.elements,
+      createdAt: new Date().toISOString(),
     };
 
     let result;
@@ -235,7 +231,7 @@ const FormCreate = () => {
       <div className="absolute bottom-40 right-1/3 w-24 h-24 bg-[#33a393]/10 rounded-full blur-xl"></div>
 
       {/* Toolbar */}
-    {user?.role !== "admin" && <Header />}
+      {user?.role !== "admin" && <Header />}
       <div className="relative z-10 bg-white/90 backdrop-blur-sm border-b border-purple-200/30 px-20 py-4 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">

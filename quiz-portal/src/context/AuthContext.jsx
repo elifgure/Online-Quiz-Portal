@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../lib/fireBase";
 import { doc, getDoc } from "firebase/firestore";
 
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
       if (firebaseUser) {
         try {
           let role = null;
+          let userData = null;
 
           // Önce admin mi diye kontrol et
           const adminRef = doc(db, "admins", firebaseUser.uid);
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }) => {
 
           if (adminSnap.exists()) {
             role = "admin";
+            userData = adminSnap.data();
           } else {
             // Admin değilse öğretmen mi diye kontrol et
             const teacherRef = doc(db, "teachers", firebaseUser.uid);
@@ -36,22 +39,25 @@ export const AuthProvider = ({ children }) => {
 
             if (teacherSnap.exists()) {
               role = "teacher";
+              userData = teacherSnap.data();
             } else {
               // Öğrenci mi diye kontrol et
               const studentRef = doc(db, "students", firebaseUser.uid);
               const studentSnap = await getDoc(studentRef);
               if (studentSnap.exists()) {
-                role = "student"
+                role = "student";
+                userData = studentSnap.data();
               }
             }
           }
 
-          const userData = {
+          const finalUserData = {
+            ...userData, // Firestore'dan gelen veriler
             uid: firebaseUser.uid,
             email: firebaseUser.email,
-            displayName: firebaseUser.displayName,
+            displayName: firebaseUser.displayName || userData?.displayName,
             emailVerified: firebaseUser.emailVerified,
-            photoURL: firebaseUser.photoURL,
+            photoURL: firebaseUser.photoURL || userData?.photoURL,
             phoneNumber: firebaseUser.phoneNumber,
             createdAt: firebaseUser.metadata.creationTime,
             lastLoginAt: firebaseUser.metadata.lastSignInTime,
@@ -59,14 +65,7 @@ export const AuthProvider = ({ children }) => {
             role: role, 
           };
 
-          // Admin için ek bilgileri al
-          if (role === "admin") {
-            const adminData = adminSnap.data();
-            userData.permissions = adminData.permissions || [];
-            userData.adminSince = adminData.createdAt;
-          }
-
-          setUser(userData);
+          setUser(finalUserData);
         } catch (err) {
           console.error("Kullanıcı rolü alınamadı:", err);
           setUser(null);
@@ -80,18 +79,19 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+ 
   const value = {
     user,
     loading,
     isAuthenticated: !!user,
     isEmailVerified: user?.emailVerified || false,
     userEmail: user?.email,
-    userName: user?.name || user?.displayName,
+    userName: user?.displayName,
     userId: user?.uid,
     role: user?.role || null,
     isAdmin: user?.role === "admin",
     adminPermissions: user?.permissions || [],
-    adminSince: user?.adminSince || null,
+    adminSince: user?.createdAt || null,
   };
 
   return (

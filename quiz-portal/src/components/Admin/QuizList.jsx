@@ -12,6 +12,7 @@ const QuizList = () => {
   useEffect(() => {
     const fetchQuizzes = async () => {
       const quizzes = await getAllQuizzes();
+      quizzes.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       setQuizzes(quizzes);
     };
 

@@ -14,7 +14,7 @@ import {
   Shield,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser} from "../../features/Auth/authService";
+import { loginUser, loginWithGoogle } from "../../features/Auth/authService";
 import logo from "../../assets/logo-transparent.png";
 
 const LoginForm = () => {
@@ -72,6 +72,26 @@ const LoginForm = () => {
       }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await loginWithGoogle();
+      if (result.success) {
+        // Kullanıcı rolüne göre yönlendirme
+        const userRole = result.user.role;
+        if (userRole === "student") {
+          navigate("/student");
+        } else if (userRole === "teacher") {
+          navigate("/teacher");
+        } else if (userRole === "admin") {
+          navigate("/admin");
+        }
+        toast.success("Google ile giriş başarılı!");
+      }
+    } catch (error) {
+      toast.error("Google ile giriş başarısız: " + error.message);
     }
   };
 
@@ -257,6 +277,24 @@ const LoginForm = () => {
               )}
             </button>
           </form>
+
+          {/* Google Login Button */}
+          <div className="mt-4">
+            <button
+              onClick={handleGoogleLogin}
+              className="w-full py-4 px-6 rounded-xl font-semibold text-white text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-[#db4437] to-[#c13584] hover:from-[#c13584] hover:to-[#a32b6d] active:scale-[0.98]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 2a6 6 0 110 12 6 6 0 010-12zm-1 3h2v6h-2V7zm0 8h2v2h-2v-2z" />
+              </svg>
+              Google ile Giriş Yap
+            </button>
+          </div>
 
           {/* Footer Links */}
           <div className="mt-8 text-center space-y-3">

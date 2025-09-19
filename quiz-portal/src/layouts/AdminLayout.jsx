@@ -3,7 +3,6 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
   Package,
   Users,
-  Settings,
   LogOut,
   Menu,
   X,
@@ -163,7 +162,7 @@ if (loading) {
                         <button
                           onClick={() => {
                             setDropdownOpen(false);
-                            navigate("/admin/profile");
+                            navigate("/admin");
                           }}
                           className="block w-full text-left px-4 py-3 text-sm text-[#2d6c74] hover:bg-gradient-to-r hover:from-purple-50 hover:to-orange-50 hover:text-[#044c5c] transition-all duration-200"
                         >
