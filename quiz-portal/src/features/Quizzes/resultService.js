@@ -69,7 +69,36 @@ export const getAllResults = async () => {
     throw error;
   }
 };
+// Öğretmenin kendi quizlerine ait sonuçları çekmek için kullanılan 
+export const getResultsByTeacher = async (teacherId)=>{
+  try {
+     // Önce öğretmenin quizlerini al
+     const quizzesRef = collection(db, "quizzes");
+     const quizzesQuery = query(quizzesRef, where("createdBy", "==", teacherId))
+      const quizzesSnapshot = await getDocs(quizzesQuery);
+      const teacherQuizIds = quizzesSnapshot.docs.map(doc => doc.id);
+    
+    if (teacherQuizIds.length === 0) {
+      return []; // Öğretmenin hiç quizi yoksa boş array döndür
+    }
+  
+      // Şimdi bu quizlerin sonuçlarını al
+      const resultsRef = collection(db, "results");
+      const resultsQuery = query(resultsRef, where("quizId", "in", teacherQuizIds));
+      const resultsSnapshot = await getDocs(resultsQuery);
 
+      return resultsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt:
+        doc.data().createdAt?.toDate()?.toISOString() ||
+        new Date().toISOString(),
+      }));
+  } catch (error) {
+    console.error("Öğretmen sonuçları getirilemedi:", error);
+    throw error;
+  }
+}
 // aktiviteler için kullanılan fonksiyon
 export const getRecentActivities = async (userId) => {
   if (!userId) {

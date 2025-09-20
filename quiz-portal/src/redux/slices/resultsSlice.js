@@ -1,4 +1,4 @@
-import { getAllResults, getResultsByStudent } from "../../features/Quizzes/resultService";
+import { getAllResults, getResultsByStudent, getResultsByTeacher } from "../../features/Quizzes/resultService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // mevcut öğrenci sonuç fonksiyonu
@@ -13,7 +13,18 @@ export const fetchStudentResults = createAsyncThunk(
     }
   }
 );
-
+// öğretmenin kendi quizlerinin sonuçları
+export const fetchTeacherResults = createAsyncThunk(
+  "results/fetchTeacherResults",
+  async (teacherId, {rejectWithValue})=>{
+    try {
+      const results = await getResultsByTeacher(teacherId);
+      return results;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+)
 // tüm sonuçları yöneten fonksiyon
 export const fetchAllResults = createAsyncThunk(
   "results/fetchAllResults",

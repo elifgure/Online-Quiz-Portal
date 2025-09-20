@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import {
   fetchAllResults,
   fetchStudentResults,
+  fetchTeacherResults,
 } from "../../redux/slices/resultsSlice";
 import Header from "../../components/Layout/Header";
 import StudentReports from "../../components/Teacher/StudentReports";
@@ -23,13 +24,15 @@ const ReportsPage = () => {
     
   }, [results]);
 
-  useEffect(() => {
-    if (role === "teacher") {
-      dispatch(fetchAllResults());
+ useEffect(() => {
+    if (role === "admin") {
+      dispatch(fetchAllResults()); // Admin tüm sonuçları görür
+    } else if (role === "teacher") {
+      dispatch(fetchTeacherResults(user?.uid)); // Öğretmen sadece kendi quiz sonuçlarını görür
     } else if (role === "student") {
-      dispatch(fetchStudentResults(user?.uid));
+      dispatch(fetchStudentResults(user?.uid)); // Öğrenci kendi sonuçlarını görür
     }
-  }, [dispatch, role, user?.uid]);
+  }, [dispatch, role, user?.uid]);;
 
   // Eğer öğrenci bu sayfaya erişmeye çalışırsa yönlendir
   if (role === 'student') {
