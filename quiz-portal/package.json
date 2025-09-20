@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -19,7 +22,6 @@
     "@reduxjs/toolkit": "^2.8.2",
     "antd": "^5.26.0",
     "firebase": "^11.9.1",
-    "lucide": "^0.515.0",
     "lucide-react": "^0.515.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
