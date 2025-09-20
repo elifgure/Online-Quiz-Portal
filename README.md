@@ -52,7 +52,7 @@
 | 🔥 **Firebase** | Auth, Firestore, Admin SDK ile veri ve kullanıcı yönetimi 
 | 🎨 **Tailwind CSS** | Modern ve hızlı stil altyapısı 
 | 🎯 **Lucide React** | Modern icon library 
-| 🍞 **React Hot Toast** | Toast notification library 
+| 🍞 **React Toastify** | Toast notification library 
 
 ## 🚀 Firebase Servisleri
 
